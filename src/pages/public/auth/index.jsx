@@ -1,5 +1,16 @@
+import { useState } from "react";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+
 const Auth = () => {
-  return <div>Auth</div>;
+  const [visibleComponent, setVisibleComponent] = useState("signup");
+
+  if (visibleComponent === "signup") {
+    return <Signup setVisibleComponent={setVisibleComponent} />;
+  } else {
+    return <Login setVisibleComponent={setVisibleComponent} />;
+  }
+  // visibleComponent === "signup" ? <Signup /> : <Login />;
 };
 
 export default Auth;

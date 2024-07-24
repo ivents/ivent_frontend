@@ -1,3 +1,159 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    color: #212121;
+  }
+
+  nav > ul.active {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    background: #000;
+  }
+
+  /* scrollbar customisation */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-grey opacity-20;
+  }
+
+  /* element-specific styles */
+  a {
+    display: inline-block;
+  }
+  h1,
+  h2,
+  h3 {
+    line-height: 1;
+  }
+
+  span,
+  a {
+    display: inline-block;
+  }
+
+  label {
+    @apply block mb-[10px] text-sm font-medium;
+  }
+
+  input {
+    @apply border border-grey py-2 px-4 rounded-[4px];
+  }
+
+  button {
+    transition: all 200ms;
+  }
+
+  button:hover {
+    opacity: 0.7;
+  }
+
+  button:active {
+    opacity: 1;
+    scale: 0.95;
+  }
+
+  /* class-specific styles */
+  .heading-lg {
+    font-size: clamp(1.5rem, 1.3571rem + 0.7143vw, 2rem);
+  }
+
+  /* button styles */
+  .btn {
+    @apply py-2 px-4 rounded-[6px] transition-all font-semibold;
+  }
+
+  .btn.btn-primary {
+    @apply bg-grey border border-grey;
+  }
+
+  .btn.btn-secondary {
+    @apply border border-grey;
+  }
+
+  .btn.btn-accent {
+    @apply bg-accent text-[#eee];
+  }
+
+  /* grid styles */
+  .dynamic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  }
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-4 p-2 mb-4 w-full rounded-md transition-colors hover:bg-[#BDBDBD] hover:cursor-pointer;
+  }
+
+  .sidebar-link img {
+    @apply w-8;
+  }
+
+  .popup-link {
+    @apply flex items-center gap-2 mb-4 hover:opacity-80;
+  }
+
+  .popup-link img {
+    @apply w-4;
+  }
+
+  .preload {
+    position: relative;
+    -webkit-box-reflect: below -20px linear-gradient(transparent, rgba(0, 0, 0, 0.2));
+  }
+  .preload span {
+    @apply relative inline-block text-5xl text-white font-black uppercase;
+    animation: wave 1s infinite;
+    animation-delay: calc(0.1s * var(--i));
+  }
+
+  .logo-animation span:not(:first-child) {
+    text-transform: lowercase;
+  }
+
+  .logo:hover span {
+    animation: wave 1s linear infinite;
+    animation-delay: calc(0.1s * var(--i));
+  }
+
+  .skeleton {
+    animation: pulsate 0.3s linear infinite alternate;
+  }
+
+  @keyframes wave {
+    0%,
+    40%,
+    100% {
+      transform: translateY(0);
+      color: #8c52ff;
+    }
+
+    50% {
+      transform: translateY(-8px);
+      color: #ffbd59;
+    }
+  }
+}
+
+@keyframes pulsate {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
