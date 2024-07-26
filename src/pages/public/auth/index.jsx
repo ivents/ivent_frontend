@@ -10,7 +10,6 @@ const Auth = () => {
   } else {
     return <Login setVisibleComponent={setVisibleComponent} />;
   }
-  // visibleComponent === "signup" ? <Signup /> : <Login />;
 };
 
 export default Auth;

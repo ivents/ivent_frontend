@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -6,23 +6,25 @@ import TextError from "../../../../components/TextError";
 import axios from "axios";
 
 const Login = ({ setVisibleComponent }) => {
+  const navigate = useNavigate();
   const initialValues = {
     email: "",
     password: "",
   };
 
   const onSubmit = (values) => {
-    console.log("Form data", values);
     axios
-      .post("https://ivents-backend.onrender.com/api/auth/login", values)
+      .post("https://api.iventverse.com/v1/auth/signin/", values)
       .then((res) => {
-        console.log(res);
-        localStorage.setItem("token", JSON.stringify(res.data.accessToken));
-        window.location.replace("/");
-        // setToken(res.data.accessToken);
-        // console.log(token);
+        localStorage.setItem(
+          "auth",
+          JSON.stringify({ token: res.data.token, user: res.data.user })
+        );
+        navigate("/dashboard");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log("an error occurred", error);
+      });
   };
 
   const validationSchema = Yup.object({

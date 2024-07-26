@@ -78,11 +78,11 @@
   }
 
   .btn.btn-secondary {
-    @apply border border-grey;
+    @apply border border-white text-white;
   }
 
   .btn.btn-accent {
-    @apply bg-accent text-[#eee];
+    @apply bg-accent text-white;
   }
 
   /* grid styles */

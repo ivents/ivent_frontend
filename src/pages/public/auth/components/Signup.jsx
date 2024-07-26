@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import TextError from "../../../../components/TextError";
 import axios from "axios";
 
 const Signup = ({ setVisibleComponent }) => {
+  const navigate = useNavigate();
+
   const initialValues = {
     first_name: "",
     last_name: "",
@@ -16,15 +18,33 @@ const Signup = ({ setVisibleComponent }) => {
   };
 
   const onSubmit = (values) => {
-    console.log("Form data", values);
+    console.log("Data", values);
     axios
-      .post("https://ivents-backend.onrender.com/api/auth/register", values)
-      .then((res) => {
-        console.log(res);
-        localStorage.setItem("token", JSON.stringify(res.data.accessToken));
-        window.location.replace("/");
+      .post("https://api.iventverse.com/v1/auth/signup/", {
+        first_name: values.first_name,
+        last_name: values.last_name,
+        email: values.email,
+        home_address: values.home_address,
+        password: values.password,
       })
-      .catch((error) => console.log(error.response.data));
+      .then((res) => {
+        axios
+          .post("https://api.iventverse.com/v1/auth/signin/", {
+            email: values.email,
+            password: values.password,
+          })
+          .then((res) => {
+            localStorage.setItem(
+              "auth",
+              JSON.stringify({ token: res.data.token, user: res.data.user })
+            );
+            navigate("/dashboard");
+          })
+          .catch((error) => {
+            console.log("an error occurred", error);
+          });
+      })
+      .catch((error) => console.log("There was an error", error));
   };
 
   const validationSchema = Yup.object({
@@ -41,7 +61,6 @@ const Signup = ({ setVisibleComponent }) => {
       .min(8, "Password is too short")
       .oneOf([Yup.ref("password"), null], "Passwords must match"),
     home_address: Yup.string().required("Please provide your address"),
-    phonenumber: Yup.number().required("Don't forget your phone number"),
   });
 
   // state to store if the password is showing or not
@@ -157,6 +176,7 @@ const Signup = ({ setVisibleComponent }) => {
         <p className="text-center text-gray-600 mt-2">
           Do you have an account already?{" "}
           <button
+            type="button"
             onClick={() => setVisibleComponent("login")}
             className="font-medium underline text-accent"
           >
