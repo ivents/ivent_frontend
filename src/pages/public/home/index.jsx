@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import logo from "/logo.svg";
@@ -6,10 +6,23 @@ import logo from "/logo.svg";
 import HeaderCarousel from "./components/HeaderCarousel";
 import SearchForm from "./components/SearchForm";
 import { RoundedEventSkeleton } from "./components/Skeletons";
+import axios from "axios";
 
 const Home = () => {
   const [events, setEvents] = useState([]);
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
+
+  useEffect(() => {
+    axios
+      .get("https://api.iventverse.com/v1/events/all_created_events/")
+      .then((res) => {
+        setEvents(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <main>
       <nav className="flex items-center justify-between bg-gray-900 py-2 px-[10%]">
@@ -28,6 +41,14 @@ const Home = () => {
       </nav>
 
       <HeaderCarousel />
+
+      {events.map((event) => (
+        <div key={event.event_id}>
+          <p>{event.event_name}</p>
+          <p>{event.event_description}</p>
+          <p>{event.event_venue}</p>
+        </div>
+      ))}
 
       {/* <SearchForm />
 
