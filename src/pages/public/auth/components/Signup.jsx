@@ -4,9 +4,14 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import TextError from "../../../../components/TextError";
 import axios from "axios";
+import LoadingSpinner from "../../../../components/LoadingSpinner";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/ReactToastify.css";
 
 const Signup = ({ setVisibleComponent }) => {
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialValues = {
     first_name: "",
@@ -18,7 +23,7 @@ const Signup = ({ setVisibleComponent }) => {
   };
 
   const onSubmit = (values) => {
-    console.log("Data", values);
+    setIsLoading(true);
     axios
       .post("https://api.iventverse.com/v1/auth/signup/", {
         first_name: values.first_name,
@@ -28,6 +33,7 @@ const Signup = ({ setVisibleComponent }) => {
         password: values.password,
       })
       .then((res) => {
+        toast.success("Account created successfully. Logging you in...");
         axios
           .post("https://api.iventverse.com/v1/auth/signin/", {
             email: values.email,
@@ -38,13 +44,21 @@ const Signup = ({ setVisibleComponent }) => {
               "auth",
               JSON.stringify({ token: res.data.token, user: res.data.user })
             );
+            toast.success("Logged in successfully");
             navigate("/dashboard");
+            setIsLoading(false);
           })
           .catch((error) => {
             console.log("an error occurred", error);
+            toast.error("Could not log you in");
+            setIsLoading(false);
           });
       })
-      .catch((error) => console.log("There was an error", error));
+      .catch((error) => {
+        console.log("There was an error", error);
+        toast.error(`Error creating account: ${error.response.data.email[0]}`);
+        setIsLoading(false);
+      });
   };
 
   const validationSchema = Yup.object({
@@ -73,6 +87,7 @@ const Signup = ({ setVisibleComponent }) => {
       validationSchema={validationSchema}
     >
       <Form className="w-[90%] md:w-3/4 lg:w-1/2 mx-auto py-16">
+        <ToastContainer />
         <h1 className="text-center font-bold text-4xl mb-16">Sign Up</h1>
 
         <div className="dynamic-grid gap-4 mb-4">
@@ -167,9 +182,10 @@ const Signup = ({ setVisibleComponent }) => {
         <div className="text-center mt-6">
           <button
             type="submit"
+            disabled={isLoading}
             className="px-16 py-3 btn w-full bg-accent text-white rounded-md"
           >
-            Sign Up
+            {isLoading ? <LoadingSpinner /> : "Sign Up"}
           </button>
         </div>
 

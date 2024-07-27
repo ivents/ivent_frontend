@@ -4,15 +4,22 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import TextError from "../../../../components/TextError";
 import axios from "axios";
+import LoadingSpinner from "../../../../components/LoadingSpinner";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/ReactToastify.css";
 
 const Login = ({ setVisibleComponent }) => {
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const initialValues = {
     email: "",
     password: "",
   };
 
   const onSubmit = (values) => {
+    setIsLoading(true);
     axios
       .post("https://api.iventverse.com/v1/auth/signin/", values)
       .then((res) => {
@@ -20,10 +27,14 @@ const Login = ({ setVisibleComponent }) => {
           "auth",
           JSON.stringify({ token: res.data.token, user: res.data.user })
         );
+        toast.success("Logged in successfully!");
         navigate("/dashboard");
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log("an error occurred", error);
+        setIsLoading(false);
+        toast.error(error.response.data.non_field_errors[0]);
       });
   };
 
@@ -44,6 +55,7 @@ const Login = ({ setVisibleComponent }) => {
       onSubmit={onSubmit}
     >
       <Form className="w-[90%] md:w-3/4 lg:w-1/2 mx-auto py-16">
+        <ToastContainer />
         <h1 className="text-center font-bold text-4xl mb-16">Log in</h1>
 
         <div className="mb-4">
@@ -91,9 +103,10 @@ const Login = ({ setVisibleComponent }) => {
         <div className="text-center">
           <button
             type="submit"
+            disabled={isLoading}
             className="px-16 py-3 btn w-full bg-accent text-white rounded-md"
           >
-            Log in
+            {isLoading ? <LoadingSpinner /> : "Log in"}
           </button>
         </div>
 

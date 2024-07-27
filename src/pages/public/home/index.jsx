@@ -9,6 +9,7 @@ import { RoundedEventSkeleton } from "./components/Skeletons";
 
 const Home = () => {
   const [events, setEvents] = useState([]);
+  const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
   return (
     <main>
       <nav className="flex items-center justify-between bg-gray-900 py-2 px-[10%]">
@@ -17,8 +18,11 @@ const Home = () => {
         </Link>
 
         <div className="flex items-center gap-4">
-          <Link className="btn btn-accent px-8" to="/auth">
-            Sign up
+          <Link
+            className="btn btn-accent px-8"
+            to={auth?.token ? "/dashboard" : "/auth"}
+          >
+            {auth?.token ? "Dashboard" : "Sign up"}
           </Link>
         </div>
       </nav>
