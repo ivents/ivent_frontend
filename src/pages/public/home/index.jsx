@@ -5,11 +5,15 @@ import logo from "/logo.svg";
 
 import HeaderCarousel from "./components/HeaderCarousel";
 import SearchForm from "./components/SearchForm";
-import { RoundedEventSkeleton } from "./components/Skeletons";
+import {
+  EventGridSkeleton,
+  RoundedEventSkeleton,
+} from "./components/Skeletons";
 import axios from "axios";
 
 const Home = () => {
   const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
 
   useEffect(() => {
@@ -17,11 +21,21 @@ const Home = () => {
       .get("https://api.iventverse.com/v1/events/all_created_events/")
       .then((res) => {
         setEvents(res.data.data);
+        setFilteredEvents(res.data.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  const handleSearch = (e) => {
+    const filteredEvents = events?.filter((event) =>
+      `${event.event_name} ${event.event_description} ${event.event_venue}`
+        .toLowerCase()
+        .includes(e.target.value)
+    );
+    setFilteredEvents(filteredEvents);
+  };
 
   return (
     <main>
@@ -42,13 +56,29 @@ const Home = () => {
 
       <HeaderCarousel />
 
-      {events.map((event) => (
-        <div key={event.event_id}>
-          <p>{event.event_name}</p>
-          <p>{event.event_description}</p>
-          <p>{event.event_venue}</p>
+      <form>
+        <div className="formgroup">
+          <label htmlFor="search_query">Search</label>
         </div>
-      ))}
+        <input
+          onChange={handleSearch}
+          type="text"
+          name="search_query"
+          id="search_query"
+        />
+      </form>
+
+      {filteredEvents?.length !== 0 || events?.length !== 0 ? (
+        filteredEvents.map((event) => (
+          <div key={event.event_id}>
+            <p>{event.event_name}</p>
+            <p>{event.event_description}</p>
+            <p>{event.event_venue}</p>
+          </div>
+        ))
+      ) : (
+        <EventGridSkeleton />
+      )}
 
       {/* <SearchForm />
 
