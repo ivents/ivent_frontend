@@ -10,6 +10,15 @@ import {
   RoundedEventSkeleton,
 } from "./components/Skeletons";
 import axios from "axios";
+import {
+  LocationCityRounded,
+  Pin,
+  PinDropRounded,
+  Search,
+  Timer,
+  Watch,
+} from "@mui/icons-material";
+import EventCard from "../../../components/EventCard";
 
 const Home = () => {
   const [events, setEvents] = useState([]);
@@ -56,29 +65,29 @@ const Home = () => {
 
       <HeaderCarousel />
 
-      <form>
-        <div className="formgroup">
-          <label htmlFor="search_query">Search</label>
+      <form className="w-4/5 mx-auto mb-8">
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2" />
+          <input
+            onChange={handleSearch}
+            type="text"
+            name="search_query"
+            id="search_query"
+            placeholder="Type to search"
+            aria-label="Search"
+            className="w-full pl-12"
+          />
         </div>
-        <input
-          onChange={handleSearch}
-          type="text"
-          name="search_query"
-          id="search_query"
-        />
       </form>
-
-      {filteredEvents?.length !== 0 || events?.length !== 0 ? (
-        filteredEvents.map((event) => (
-          <div key={event.event_id}>
-            <p>{event.event_name}</p>
-            <p>{event.event_description}</p>
-            <p>{event.event_venue}</p>
-          </div>
-        ))
-      ) : (
-        <EventGridSkeleton />
-      )}
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-4/5 mx-auto">
+        {filteredEvents?.length !== 0 || events?.length !== 0 ? (
+          filteredEvents.map((event) => (
+            <EventCard key={event.event_id} event={event} />
+          ))
+        ) : (
+          <EventGridSkeleton />
+        )}
+      </div>
 
       {/* <SearchForm />
 

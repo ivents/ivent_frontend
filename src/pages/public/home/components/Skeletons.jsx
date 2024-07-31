@@ -1,17 +1,13 @@
 export const EventGridSkeleton = () => {
-  return (
-    <div className="events-grid gap-6 skeleton">
-      {[...Array(6)].map((card, index) => (
-        <div key={index}>
-          <div className="h-36 w-full bg-gray-200 rounded-lg mb-4" />
-          <div className="flex justify-between">
-            <div className="w-24 h-4 rounded-full bg-gray-200" />
-            <div className="w-16 bg-gray-200 rounded-full" />
-          </div>
-        </div>
-      ))}
+  return [...Array(6)].map((card, index) => (
+    <div key={index} className="col-span-1 animate-pulse">
+      <div className="h-36 w-full bg-gray-200 rounded-lg mb-4" />
+      <div className="flex justify-between">
+        <div className="w-24 h-4 rounded-full bg-gray-200" />
+        <div className="w-16 bg-gray-200 rounded-full" />
+      </div>
     </div>
-  );
+  ));
 };
 
 export const RoundedEventSkeleton = () => {

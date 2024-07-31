@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    color: #212121;
+    @apply text-gray-600;
   }
 
   nav > ul.active {
@@ -34,7 +34,7 @@
   h1,
   h2,
   h3 {
-    line-height: 1;
+    @apply leading-[1] text-gray-800;
   }
 
   span,
@@ -47,7 +47,7 @@
   }
 
   input {
-    @apply border border-grey py-2 px-4 rounded-[4px];
+    @apply border border-grey py-2 px-4 rounded-md;
   }
 
   button {
@@ -78,7 +78,7 @@
 
   /* button styles */
   .btn {
-    @apply py-2 px-4 rounded-[6px] transition-all font-semibold;
+    @apply py-2 px-4 rounded-md transition-all font-semibold;
   }
 
   .btn.btn-primary {
@@ -138,10 +138,6 @@
     animation-delay: calc(0.1s * var(--i));
   }
 
-  .skeleton {
-    animation: pulsate 0.3s linear infinite alternate;
-  }
-
   @keyframes wave {
     0%,
     40%,
@@ -154,14 +150,5 @@
       transform: translateY(-8px);
       color: #ffbd59;
     }
-  }
-}
-
-@keyframes pulsate {
-  from {
-    opacity: 0.5;
-  }
-  to {
-    opacity: 1;
   }
 }
