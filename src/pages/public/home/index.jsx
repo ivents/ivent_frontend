@@ -19,6 +19,7 @@ import {
   Watch,
 } from "@mui/icons-material";
 import EventCard from "../../../components/EventCard";
+import Footer from "../../../components/Footer";
 
 const Home = () => {
   const [events, setEvents] = useState([]);
@@ -116,6 +117,7 @@ const Home = () => {
           )}
         </div>
       </section> */}
+      <Footer />
     </main>
   );
 };

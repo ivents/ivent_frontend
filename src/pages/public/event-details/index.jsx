@@ -2,11 +2,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import Footer from "../../../components/Footer";
 
 const EventDetails = () => {
   const location = useLocation();
   const [event, setEvent] = useState(location.state);
-  const { id } = useParams();
 
   useEffect(() => {
     if (!location.state) {
@@ -34,6 +34,8 @@ const EventDetails = () => {
       ) : (
         <p>Loading...</p>
       )}
+
+      <Footer />
     </>
   );
 };
