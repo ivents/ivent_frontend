@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply text-gray-600;
+    @apply text-gray-600 bg-gray-50;
   }
 
   nav > ul.active {
@@ -34,7 +34,17 @@
   h1,
   h2,
   h3 {
-    @apply leading-[1] text-gray-800;
+    @apply leading-[1] text-gray-800 font-bold;
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+  h2 {
+    @apply text-2xl;
+  }
+  h3 {
+    @apply text-xl;
   }
 
   span,
@@ -86,7 +96,7 @@
   }
 
   .btn.btn-secondary {
-    @apply border border-white text-white;
+    @apply border border-accent text-accent bg-white;
   }
 
   .btn.btn-accent {

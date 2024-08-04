@@ -64,9 +64,11 @@ const Home = () => {
         </div>
       </nav>
 
-      <HeaderCarousel />
+      {/* <HeaderCarousel /> */}
+      <div className="w-full h-[30vh] bg-gray-300 mb-8" />
 
       <form className="w-4/5 mx-auto mb-8">
+        <label htmlFor="search_query">Search events</label>
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2" />
           <input

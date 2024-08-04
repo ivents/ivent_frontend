@@ -16,19 +16,19 @@ const HeaderCarousel = () => {
         <input type="radio" id="s-5" name="slider-control" />
         <ul className="s-content">
           <li className="s-item s-item-2">
-            <video src={vid1} controls loop autoPlay muted></video>
+            <video src={vid1} loop autoPlay muted></video>
           </li>
           <li className="s-item s-item-2">
-            <video src={vid2} controls loop autoPlay muted></video>
+            <video src={vid2} loop autoPlay muted></video>
           </li>
           <li className="s-item s-item-3">
-            <video src={vid3} controls loop autoPlay muted></video>
+            <video src={vid3} loop autoPlay muted></video>
           </li>
           <li className="s-item s-item-4">
-            <video src={vid4} controls loop autoPlay muted></video>
+            <video src={vid4} loop autoPlay muted></video>
           </li>
           <li className="s-item s-item-5">
-            <video src={vid5} controls loop autoPlay muted></video>
+            <video src={vid5} loop autoPlay muted></video>
           </li>
         </ul>
         <div className="s-control">

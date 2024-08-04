@@ -5,7 +5,7 @@ import Home from "./pages/public/home";
 import Auth from "./pages/public/auth";
 import { PrivateRoutesLayout } from "./pages/private/layout";
 import Dashboard from "./pages/private/dashboard";
-import EventDetails from "./pages/public/event-details";
+import EventDetails from "./pages/public/event";
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/event-details/:id" element={<EventDetails />} />
+          <Route path="/event/:id" element={<EventDetails />} />
         </Route>
         <Route element={<PrivateRoutesLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
