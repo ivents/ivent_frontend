@@ -88,7 +88,7 @@
 
   /* button styles */
   .btn {
-    @apply py-2 px-4 rounded-md transition-all font-semibold;
+    @apply py-2 px-4 rounded-md transition-all font-medium;
   }
 
   .btn.btn-primary {

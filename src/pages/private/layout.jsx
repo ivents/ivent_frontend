@@ -1,5 +1,15 @@
+import {
+  AddOutlined,
+  AirplaneTicketOutlined,
+  ConfirmationNumberOutlined,
+  EventNoteOutlined,
+  LogoutOutlined,
+  PersonOutlined,
+  SearchOutlined,
+  SortOutlined,
+} from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 export const PrivateRoutesLayout = () => {
   const navigate = useNavigate();
@@ -13,7 +23,6 @@ export const PrivateRoutesLayout = () => {
 
   return (
     <>
-      <p>Navigation</p>
       <Outlet />
     </>
   );

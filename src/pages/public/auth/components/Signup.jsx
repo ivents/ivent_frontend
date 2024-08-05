@@ -45,7 +45,7 @@ const Signup = ({ setVisibleComponent }) => {
               JSON.stringify({ token: res.data.token, user: res.data.user })
             );
             toast.success("Logged in successfully");
-            navigate("/dashboard");
+            navigate("/");
             setIsLoading(false);
           })
           .catch((error) => {
