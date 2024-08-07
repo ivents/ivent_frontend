@@ -10,6 +10,7 @@ import {
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar";
 
 export const PrivateRoutesLayout = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export const PrivateRoutesLayout = () => {
 
   return (
     <>
+      <Navbar />
       <Outlet />
     </>
   );
