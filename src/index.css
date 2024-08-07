@@ -34,7 +34,7 @@
   h1,
   h2,
   h3 {
-    @apply leading-[1] text-gray-800 font-bold;
+    @apply leading-[1] tracking-tight text-gray-800 font-bold;
   }
 
   h1 {
