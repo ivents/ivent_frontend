@@ -4,10 +4,12 @@ import { Link, useLocation } from "react-router-dom";
 import Footer from "../../../components/Footer";
 import { AccessTimeOutlined, CalendarMonthOutlined } from "@mui/icons-material";
 import { eventDummy } from "../../../../data";
+import GetTicketModal from "./components/GetTicketModal";
 
 const EventDetails = () => {
   const location = useLocation();
   const [event, setEvent] = useState(location.state);
+  const [isShowingGetTicketModal, setIsShowingGetTicketModal] = useState(false);
 
   useEffect(() => {
     if (!location.state) {
@@ -28,15 +30,25 @@ const EventDetails = () => {
         <>
           <div className="h-[40vh] w-full bg-gray-300 mb-8" />
 
+          {isShowingGetTicketModal && (
+            <GetTicketModal
+              setIsShowingGetTicketModal={setIsShowingGetTicketModal}
+              event={event}
+            />
+          )}
+
           <section className="w-4/5 mx-auto">
-            <div className="flex justify-between items-start mb-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-between items-start mb-4">
               <div>
                 <h1 className="mb-2">{event.event_name}</h1>
                 <p className="max-w-[40ch]">{event.event_description}</p>
               </div>
-              <Link to="/" className="btn btn-accent">
+              <button
+                onClick={() => setIsShowingGetTicketModal(true)}
+                className="btn btn-accent"
+              >
                 Get tickets - <span className="font-bold">&#8358;5000</span>
-              </Link>
+              </button>
             </div>
 
             <div className="flex items-start gap-8">
@@ -74,7 +86,7 @@ const EventDetails = () => {
           <section className="w-4/5 mx-auto mt-8">
             <h3>About the host</h3>
 
-            <div className="flex justify-between items-center my-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-between sm:items-center my-4">
               <div className="flex items-center gap-2">
                 <div className="grid place-content-center h-12 w-12 rounded-full bg-accent/10">
                   <p>SM</p>

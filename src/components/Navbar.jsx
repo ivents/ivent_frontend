@@ -28,7 +28,7 @@ const Navbar = () => {
       {!auth?.token ? (
         <Link className="flex items-center gap-2 btn btn-accent" to="/auth">
           <ExitToAppOutlined fontSize="inherit" />
-          <span className="text-sm">Sign up</span>
+          <span className="text-sm">Log in</span>
         </Link>
       ) : (
         <>

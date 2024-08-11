@@ -8,7 +8,7 @@ import LoadingSpinner from "../../../../components/LoadingSpinner";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 
-const Login = ({ setVisibleComponent }) => {
+const Login = ({ setVisibleComponent, prevPage }) => {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +28,7 @@ const Login = ({ setVisibleComponent }) => {
           JSON.stringify({ token: res.data.token, user: res.data.user })
         );
         toast.success("Logged in successfully!");
-        navigate("/");
+        prevPage ? navigate(prevPage) : navigate("/");
         setIsLoading(false);
       })
       .catch((error) => {

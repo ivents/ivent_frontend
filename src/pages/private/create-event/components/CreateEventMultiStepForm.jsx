@@ -4,9 +4,7 @@ import TextError from "../../../../components/TextError";
 import * as Yup from "yup";
 import {
   ArrowBackOutlined,
-  ArrowForwardIosOutlined,
   ArrowForwardOutlined,
-  ArrowRightOutlined,
   CheckOutlined,
 } from "@mui/icons-material";
 import axios from "axios";
@@ -68,6 +66,7 @@ const StepOne = (props) => {
 
 const stepTwoValidationSchema = Yup.object({
   event_venue: Yup.string().required("Event venue is required"),
+  event_city: Yup.string().required("Event city is required"),
 });
 
 const StepTwo = (props) => {
@@ -93,6 +92,18 @@ const StepTwo = (props) => {
               required
             />
             <ErrorMessage name="event_venue" component={TextError} />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="event_venue">Event city</label>
+            <Field
+              className="w-full px-4 py-2"
+              name="event_city"
+              id="event_city"
+              placeholder="City of event"
+              required
+            />
+            <ErrorMessage name="event_city" component={TextError} />
           </div>
 
           <div className="flex items-center justify-end gap-4">
@@ -135,6 +146,7 @@ const CreateEventMultiStepForm = () => {
     host_contact_details: JSON.parse(localStorage.getItem("auth")).user.email,
     host_id: JSON.parse(localStorage.getItem("auth")).user.id,
     event_category_id: "1",
+    event_city: "",
   });
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -143,7 +155,7 @@ const CreateEventMultiStepForm = () => {
   const makeRequest = (formData) => {
     setIsLoading(true);
     axios
-      .post("https://api.iventverse.com/v1/events/create_event/", formData, {
+      .post(`${process.env.BASE_URL}/events/create_event/`, formData, {
         headers: {
           Authorization: `Token ${token}`,
         },

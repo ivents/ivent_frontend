@@ -1,54 +1,48 @@
-import { useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
+import { Search } from "@mui/icons-material";
 
-const SearchForm = () => {
-  const [searchQuery, setSearchQuery] = useState({
-    text: "",
-    location: "",
-  });
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log(searchQuery);
-  };
-
+const SearchForm = ({ handleSearch, setSearchFormData, searchFormData }) => {
   return (
     <form
-      onSubmit={handleSearch}
-      className="flex flex-wrap flex-col sm:flex-row gap-4 w-[90%] lg:w-1/2 mx-auto my-16"
+      className="w-4/5 mx-auto mb-8 flex gap-2 sm:items-end flex-col sm:flex-row"
+      onChange={handleSearch}
     >
-      <div className="flex flex-grow items-center gap-2 border border-gray-700 rounded-md px-4 py-2">
-        <SearchIcon />
-        <input
-          onChange={(e) =>
-            setSearchQuery({ ...searchQuery, text: e.target.value })
-          }
-          value={searchQuery.text}
-          className="border-none p-0 outline-none"
-          type="text"
-          id="searchText"
-          name="searchText"
-          placeholder="Lagos party near me"
-          required
-        />
+      <div className="w-full">
+        <label htmlFor="search_query">Search events</label>
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2" />
+          <input
+            onChange={(e) =>
+              setSearchFormData({
+                ...searchFormData,
+                searchQuery: e.target.value,
+              })
+            }
+            type="text"
+            name="search_query"
+            id="search_query"
+            placeholder="Type to search"
+            aria-label="Search"
+            className="w-full pl-12"
+          />
+        </div>
       </div>
 
       <select
-        className="bg-gray-100 outline-none border rounded-md px-4"
-        name="location"
-        id="location"
+        onChange={(e) =>
+          setSearchFormData({ ...searchFormData, city: e.target.value })
+        }
+        defaultValue="location"
+        name="city"
+        id="city"
+        className="bg-gray-200 border border-gray-300 rounded-md p-2"
       >
-        <option defaultValue="" disabled>
+        <option disabled value="location">
           Location
         </option>
-        <option value="Abuja">Abuja</option>
-        <option value="Abuja">Port Harcourt</option>
-        <option value="Abuja">Delta</option>
-        <option value="Abuja">Lagos</option>
-        <option value="Abuja">Ibadan</option>
+        <option value="abuja">Abuja</option>
+        <option value="lagos">Lagos</option>
+        <option value="portharcourt">Port Harcourt</option>
       </select>
-
-      <button className="btn btn-accent py-3">Search</button>
     </form>
   );
 };
