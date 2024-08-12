@@ -1,4 +1,3 @@
-import { useState } from "react";
 import TicketCard from "./components/TicketCard";
 
 const Tickets = () => {

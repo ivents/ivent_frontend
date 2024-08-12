@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { EventGridSkeleton } from "./components/Skeletons";
 import axios from "axios";
-import { Search } from "@mui/icons-material";
+import { FindInPageOutlined, Search } from "@mui/icons-material";
 import EventCard from "../../../components/EventCard";
 import Footer from "../../../components/Footer";
 import SearchForm from "./components/SearchForm";
@@ -28,15 +28,18 @@ const Home = () => {
   }, []);
 
   const handleSearch = useDebouncedCallback((e) => {
+    console.log(searchFormData);
+
     setIsLoading(true);
 
     axios
       .get(
-        `${process.env.BASE_URL}/events/search_events/?search=${searchFormData.searchQuery}`
+        `${process.env.BASE_URL}/events/search/?search=${searchFormData.searchQuery}&event_city=${searchFormData.city}`
       )
       .then((res) => {
         setEvents(res.data);
         setIsLoading(false);
+        console.log(res.data);
       })
       .catch((error) => {
         console.log("An error occurred: " + error);
@@ -56,15 +59,22 @@ const Home = () => {
       />
 
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-4/5 mx-auto">
-        {events?.length !== 0 && isLoading === false ? (
+        {isLoading ? (
+          <EventGridSkeleton />
+        ) : events.length === 0 ? (
+          searchFormData.searchQuery && searchFormData.city ? (
+            <div>
+              <FindInPageOutlined />
+              <p>No events match your search</p>
+            </div>
+          ) : (
+            <EventGridSkeleton />
+          )
+        ) : (
           events.map((event) => (
             <EventCard key={event.event_id} event={event} />
           ))
-        ) : (
-          <EventGridSkeleton />
         )}
-
-        {isLoading === true && <EventGridSkeleton />}
       </div>
       <Footer />
     </main>

@@ -3,17 +3,26 @@ import {
   CloseOutlined,
   ConfirmationNumberOutlined,
   ExitToAppOutlined,
+  LogoutOutlined,
   MenuOutlined,
   PersonOutlined,
   SortOutlined,
 } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "/logo.svg";
 import { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("auth");
+    location.pathname === "/" ? navigate(0) : navigate("/");
+  };
 
   useEffect(() => {
     setAuth(JSON.parse(localStorage.getItem("auth")));
@@ -70,6 +79,15 @@ const Navbar = () => {
                 <span className="text-sm">Profile</span>
               </Link>
             </li>
+            <li>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 btn hover:text-red-400"
+              >
+                <LogoutOutlined fontSize="inherit" />
+                <span className="text-sm">Log out</span>
+              </button>
+            </li>
           </ul>
 
           {/* mobile menu */}
@@ -113,6 +131,15 @@ const Navbar = () => {
                   <PersonOutlined fontSize="inherit" />
                   <span className="text-sm">Profile</span>
                 </Link>
+              </li>
+              <li>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 btn hover:text-red-500"
+                >
+                  <LogoutOutlined fontSize="inherit" />
+                  <span className="text-sm">Log out</span>
+                </button>
               </li>
             </ul>
           )}

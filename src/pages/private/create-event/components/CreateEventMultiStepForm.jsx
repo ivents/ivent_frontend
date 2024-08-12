@@ -66,7 +66,9 @@ const StepOne = (props) => {
 
 const stepTwoValidationSchema = Yup.object({
   event_venue: Yup.string().required("Event venue is required"),
-  event_city: Yup.string().required("Event city is required"),
+  event_city: Yup.string()
+    .required("Event city is required")
+    .notOneOf(["city"], "Please select a valid city"),
 });
 
 const StepTwo = (props) => {
@@ -97,12 +99,19 @@ const StepTwo = (props) => {
           <div className="mb-4">
             <label htmlFor="event_venue">Event city</label>
             <Field
-              className="w-full px-4 py-2"
+              as="select"
+              className="w-full px-4 py-2 rounded-md border border-gray-400"
               name="event_city"
               id="event_city"
-              placeholder="City of event"
               required
-            />
+            >
+              <option disabled value="city">
+                City
+              </option>
+              <option value="abuja">Abuja</option>
+              <option value="lagos">Lagos</option>
+              <option value="portharcourt">Port Harcourt</option>
+            </Field>
             <ErrorMessage name="event_city" component={TextError} />
           </div>
 
@@ -146,7 +155,7 @@ const CreateEventMultiStepForm = () => {
     host_contact_details: JSON.parse(localStorage.getItem("auth")).user.email,
     host_id: JSON.parse(localStorage.getItem("auth")).user.id,
     event_category_id: "1",
-    event_city: "",
+    event_city: "city",
   });
 
   const [currentStep, setCurrentStep] = useState(0);

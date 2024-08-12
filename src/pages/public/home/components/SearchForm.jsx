@@ -31,14 +31,12 @@ const SearchForm = ({ handleSearch, setSearchFormData, searchFormData }) => {
         onChange={(e) =>
           setSearchFormData({ ...searchFormData, city: e.target.value })
         }
-        defaultValue="location"
+        defaultValue=""
         name="city"
         id="city"
         className="bg-gray-200 border border-gray-300 rounded-md p-2"
       >
-        <option disabled value="location">
-          Location
-        </option>
+        <option value="">Everywhere</option>
         <option value="abuja">Abuja</option>
         <option value="lagos">Lagos</option>
         <option value="portharcourt">Port Harcourt</option>
