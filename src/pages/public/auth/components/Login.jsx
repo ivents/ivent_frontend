@@ -61,7 +61,7 @@ const Login = ({ setVisibleComponent, prevPage }) => {
         <div className="mb-4">
           <label htmlFor="email">Email</label>
           <Field
-            className="w-full px-4 py-2"
+            className="w-full"
             type="email"
             name="email"
             id="email"
@@ -74,7 +74,7 @@ const Login = ({ setVisibleComponent, prevPage }) => {
           <div className="relative">
             <label htmlFor="password">Password</label>
             <Field
-              className="w-full px-4 py-2"
+              className="w-full"
               type={isShowingPassword ? "text" : "password"}
               name="password"
               id="password"

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
+import { redirect } from "react-router-dom";
 
 const Auth = () => {
   const [visibleComponent, setVisibleComponent] = useState("login");
