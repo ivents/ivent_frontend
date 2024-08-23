@@ -1,7 +1,19 @@
 import { Field, Form, Formik } from "formik";
+import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 
 const Profile = () => {
+  const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
+
+  const initialValues = {
+    first_name: auth.user.first_name,
+    last_name: auth.user.last_name,
+    email: auth.user.email,
+    phone_number: "",
+    password: "",
+    nationality: "",
+    city: "",
+  };
   return (
     <main className="w-[90%] md:w-3/4 lg:w-1/2 mx-auto py-8">
       <div className="h-24 w-24 rounded-full bg-gray-300 mx-auto" />
@@ -10,7 +22,7 @@ const Profile = () => {
       </p>
       <p className="text-center">johndoe@gmail.com</p>
 
-      <Formik>
+      <Formik initialValues={initialValues}>
         <Form className="mt-8">
           <ToastContainer />
           <h1 className="mb-4">Personal information</h1>
