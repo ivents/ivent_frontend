@@ -1,7 +1,7 @@
-import CreateEventMultiStepForm from "./components/CreateEventMultiStepForm";
+import FormWrapper from "./components/CreateEventMultiStepForm/FormWrapper";
 
 const CreateEvent = () => {
-  return <CreateEventMultiStepForm />;
+  return <FormWrapper />;
 };
 
 export default CreateEvent;
