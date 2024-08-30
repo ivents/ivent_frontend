@@ -19,9 +19,6 @@ const Footer = () => {
           <li className="mb-2">
             <Link to="/contact-us">Contact us</Link>
           </li>
-          <li>
-            <Link to="/terms-and-conditions">Terms and conditions</Link>
-          </li>
         </ul>
       </div>
       <div>
@@ -39,25 +36,22 @@ const Footer = () => {
           <li className="mb-2">
             <Link to="/privacy-policy">Privacy policy</Link>
           </li>
+          <li className="mb-2">
+            <Link to="/terms-of-use">Terms of use</Link>
+          </li>
+          <li>
+            <Link to="/terms-and-conditions">Terms and conditions</Link>
+          </li>
         </ul>
       </div>
       <div>
         <h4 className="font-semibold mb-4">Host events</h4>
         <ul className="text-xs">
           <li className="mb-2">
-            <Link to="/become-a-host">Become a host</Link>
-          </li>
-          <li className="mb-2">
             <Link to="/pricing">Pricing</Link>
           </li>
           <li className="mb-2">
             <Link to="/get-app">Get app</Link>
-          </li>
-          <li className="mb-2">
-            <Link to="/developers">Developers</Link>
-          </li>
-          <li className="mb-2">
-            <Link to="/terms-of-use">Terms of use</Link>
           </li>
         </ul>
       </div>
