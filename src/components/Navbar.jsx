@@ -3,6 +3,7 @@ import {
   CloseOutlined,
   ConfirmationNumberOutlined,
   ExitToAppOutlined,
+  ExpandMoreOutlined,
   LogoutOutlined,
   MenuOutlined,
   PersonOutlined,
@@ -18,6 +19,7 @@ const Navbar = () => {
 
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("auth");
@@ -46,7 +48,9 @@ const Navbar = () => {
             <li>
               <Link
                 to="/create-event"
-                className="flex items-center gap-2 btn hover:text-accent"
+                className={`${
+                  location.pathname === "/create-event" && "text-accent"
+                } flex items-center gap-2 btn hover:text-accent`}
               >
                 <AddOutlined fontSize="inherit" />
                 <span className="text-sm">Create event</span>
@@ -55,7 +59,9 @@ const Navbar = () => {
             <li>
               <Link
                 to="/my-events"
-                className="flex items-center gap-2 btn hover:text-accent"
+                className={`${
+                  location.pathname === "/my-events" && "text-accent"
+                } flex items-center gap-2 btn hover:text-accent`}
               >
                 <SortOutlined fontSize="inherit" />
                 <span className="text-sm">My events</span>
@@ -64,29 +70,55 @@ const Navbar = () => {
             <li>
               <Link
                 to="/tickets"
-                className="flex items-center gap-2 btn hover:text-accent"
+                className={`${
+                  location.pathname === "/tickets" && "text-accent"
+                } flex items-center gap-2 btn hover:text-accent`}
               >
                 <ConfirmationNumberOutlined fontSize="inherit" />
                 <span className="text-sm">Tickets</span>
               </Link>
             </li>
-            <li>
-              <Link
-                to="/profile"
-                className="flex items-center gap-2 btn hover:text-accent"
-              >
-                <PersonOutlined fontSize="inherit" />
-                <span className="text-sm">Profile</span>
-              </Link>
-            </li>
-            <li>
+            <li className="relative">
               <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 btn hover:text-red-400"
+                onClick={() => setIsProfileMenuOpen((prev) => !prev)}
+                className="flex items-center gap-2 hover:bg-gray-700 hover:opacity-100 p-2 rounded-lg"
               >
-                <LogoutOutlined fontSize="inherit" />
-                <span className="text-sm">Log out</span>
+                <img
+                  src={auth.user.avatar}
+                  alt="Avatar"
+                  className="h-6 w-6 rounded-full"
+                />
+                <span className="text-sm">{auth.user.first_name}</span>
+                <ExpandMoreOutlined fontSize="inherit" />
               </button>
+
+              {isProfileMenuOpen && (
+                <ul
+                  onClick={() => setIsProfileMenuOpen(false)}
+                  className="absolute top-14 p-4 min-w-40 rounded-lg right-0 bg-gray-800"
+                >
+                  <li>
+                    <Link
+                      to="/profile"
+                      className={`${
+                        location.pathname === "/profile" && "text-accent"
+                      } flex items-center gap-2 btn hover:text-accent`}
+                    >
+                      <PersonOutlined fontSize="inherit" />
+                      <span className="text-sm">Profile</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 btn hover:text-red-400"
+                    >
+                      <LogoutOutlined fontSize="inherit" />
+                      <span className="text-sm">Log out</span>
+                    </button>
+                  </li>
+                </ul>
+              )}
             </li>
           </ul>
 
@@ -99,7 +131,9 @@ const Navbar = () => {
               <li>
                 <Link
                   to="/create-event"
-                  className="flex items-center gap-2 btn hover:text-accent"
+                  className={`${
+                    location.pathname === "/create-event" && "text-accent"
+                  } flex items-center gap-2 btn hover:text-accent`}
                 >
                   <AddOutlined fontSize="inherit" />
                   <span className="text-sm">Create event</span>
@@ -108,7 +142,9 @@ const Navbar = () => {
               <li>
                 <Link
                   to="/my-events"
-                  className="flex items-center gap-2 btn hover:text-accent"
+                  className={`${
+                    location.pathname === "/my-events" && "text-accent"
+                  } flex items-center gap-2 btn hover:text-accent`}
                 >
                   <SortOutlined fontSize="inherit" />
                   <span className="text-sm">My events</span>
@@ -117,7 +153,9 @@ const Navbar = () => {
               <li>
                 <Link
                   to="/tickets"
-                  className="flex items-center gap-2 btn hover:text-accent"
+                  className={`${
+                    location.pathname === "/tickets" && "text-accent"
+                  } flex items-center gap-2 btn hover:text-accent`}
                 >
                   <ConfirmationNumberOutlined fontSize="inherit" />
                   <span className="text-sm">Tickets</span>
@@ -126,9 +164,19 @@ const Navbar = () => {
               <li>
                 <Link
                   to="/profile"
-                  className="flex items-center gap-2 btn hover:text-accent"
+                  className={`${
+                    location.pathname === "/profile" && "text-accent"
+                  } flex items-center gap-2 btn hover:text-accent`}
                 >
-                  <PersonOutlined fontSize="inherit" />
+                  {auth.user.avatar ? (
+                    <img
+                      src={auth.user.avatar}
+                      alt="Avatar"
+                      className="h-6 w-6 rounded-full"
+                    />
+                  ) : (
+                    <PersonOutlined />
+                  )}
                   <span className="text-sm">Profile</span>
                 </Link>
               </li>

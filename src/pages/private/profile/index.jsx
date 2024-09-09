@@ -30,7 +30,10 @@ const Profile = () => {
   const handleUpdateProfile = (values) => {
     setIsLoading(true);
     axios
-      .put(`${process.env.BASE_URL}/auth/user_profile/${auth.user.id}/`, values)
+      .patch(
+        `${process.env.BASE_URL}/auth/user_profile/${auth.user.id}/`,
+        values
+      )
       .then((res) => {
         setIsLoading(false);
         toast.success(res.data.message);
@@ -50,11 +53,15 @@ const Profile = () => {
   return (
     <>
       <main className="w-[90%] md:w-3/4 lg:w-1/2 mx-auto py-8">
-        <div className="h-24 w-24 rounded-full bg-gray-300 mx-auto" />
+        <img
+          src={auth.user.avatar}
+          alt="Avatar"
+          className="h-24 w-24 rounded-full mx-auto border-2 border-gray-800"
+        />
         <p className="font-bold text-lg text-center mt-4 text-gray-800">
-          John Doe
+          {auth.user.first_name} {auth.user.last_name}
         </p>
-        <p className="text-center">johndoe@gmail.com</p>
+        <p className="text-center">{auth.user.email}</p>
 
         <Formik
           initialValues={initialValues}
