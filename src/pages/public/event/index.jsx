@@ -28,7 +28,11 @@ const EventDetails = () => {
     <>
       {event ? (
         <>
-          <div className="h-[40vh] w-full bg-gray-300 mb-8" />
+          <img
+            src={event.event_background}
+            alt="Backgound"
+            className="h-[40vh] w-full object-cover mb-8"
+          />
 
           {isShowingGetTicketModal && (
             <GetTicketModal
@@ -76,7 +80,11 @@ const EventDetails = () => {
           <section className="w-4/5 mx-auto mt-8">
             <h3>Photos</h3>
             <div className="flex flex-wrap gap-2 mt-4">
-              <div className="h-48 min-w-56 bg-gray-100 rounded-md" />
+              <img
+                src={event.event_images}
+                alt="Image 1"
+                className="h-48 min-w-56 object-cover rounded-md"
+              />
               <div className="h-48 min-w-56 bg-gray-100 rounded-md" />
               <div className="h-48 min-w-56 bg-gray-100 rounded-md" />
               <div className="h-48 min-w-56 bg-gray-100 rounded-md" />

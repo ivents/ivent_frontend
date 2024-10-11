@@ -34,6 +34,7 @@ const FormWrapper = () => {
       .post(`${process.env.BASE_URL}/events/create_event/`, formData, {
         headers: {
           Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {

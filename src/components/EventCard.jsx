@@ -9,6 +9,11 @@ const EventCard = ({ event }) => {
       className="col-span-1 bg-gray-100 rounded-md"
     >
       <div className="relative bg-gray-300 rounded-md w-full h-48">
+        <img
+          src={event.event_background}
+          alt="Background"
+          className="w-full h-full object-cover"
+        />
         <span className="absolute bottom-0 right-0 font-semibold bg-accent text-white p-2 rounded-tl-md">
           &#8358;5000
         </span>
