@@ -20,7 +20,6 @@ const FormWrapper = () => {
     event_venue: "",
     event_slug: Date.now(),
     host_contact_details: JSON.parse(localStorage.getItem("auth")).user.email,
-    host_id: JSON.parse(localStorage.getItem("auth")).user.id,
     event_category_id: "1",
     event_city: "city",
   });

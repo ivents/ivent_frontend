@@ -81,13 +81,25 @@ const EventDetails = () => {
             <h3>Photos</h3>
             <div className="flex flex-wrap gap-2 mt-4">
               <img
-                src={event.event_images}
+                src={event.event_images1}
                 alt="Image 1"
                 className="h-48 min-w-56 object-cover rounded-md"
               />
-              <div className="h-48 min-w-56 bg-gray-100 rounded-md" />
-              <div className="h-48 min-w-56 bg-gray-100 rounded-md" />
-              <div className="h-48 min-w-56 bg-gray-100 rounded-md" />
+              <img
+                src={event.event_images2}
+                alt="Image 1"
+                className="h-48 min-w-56 object-cover rounded-md"
+              />
+              <img
+                src={event.event_images3}
+                alt="Image 1"
+                className="h-48 min-w-56 object-cover rounded-md"
+              />
+              <img
+                src={event.event_images4}
+                alt="Image 1"
+                className="h-48 min-w-56 object-cover rounded-md"
+              />
             </div>
           </section>
 
