@@ -11,7 +11,10 @@ const FormWrapper = () => {
   const [data, setData] = useState({
     event_name: "",
     event_description: "",
-    event_images: "",
+    event_images1: "",
+    event_images2: "",
+    event_images3: "",
+    event_images4: "",
     event_bakground: "",
     event_visibility: "public",
     event_start_date: "2024-10-02",
