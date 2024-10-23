@@ -80,26 +80,34 @@ const EventDetails = () => {
           <section className="w-4/5 mx-auto mt-8">
             <h3>Photos</h3>
             <div className="flex flex-wrap gap-2 mt-4">
-              <img
-                src={event.event_images1}
-                alt="Image 1"
-                className="h-48 min-w-56 object-cover rounded-md"
-              />
-              <img
-                src={event.event_images2}
-                alt="Image 1"
-                className="h-48 min-w-56 object-cover rounded-md"
-              />
-              <img
-                src={event.event_images3}
-                alt="Image 1"
-                className="h-48 min-w-56 object-cover rounded-md"
-              />
-              <img
-                src={event.event_images4}
-                alt="Image 1"
-                className="h-48 min-w-56 object-cover rounded-md"
-              />
+              {event.event_images1 && (
+                <img
+                  src={event.event_images1}
+                  alt="Image 1"
+                  className="h-48 min-w-56 object-cover rounded-md"
+                />
+              )}
+              {event.event_images2 && (
+                <img
+                  src={event.event_images2}
+                  alt="Image 2"
+                  className="h-48 min-w-56 object-cover rounded-md"
+                />
+              )}
+              {event.event_images3 && (
+                <img
+                  src={event.event_images3}
+                  alt="Image 3"
+                  className="h-48 min-w-56 object-cover rounded-md"
+                />
+              )}
+              {event.event_images4 && (
+                <img
+                  src={event.event_images4}
+                  alt="Image 4"
+                  className="h-48 min-w-56 object-cover rounded-md"
+                />
+              )}
             </div>
           </section>
 
