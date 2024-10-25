@@ -4,7 +4,6 @@ import StepTwo from "./StepTwo";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import axios from "axios";
-import { redirect } from "react-router-dom";
 
 const FormWrapper = () => {
   const token = JSON.parse(localStorage.getItem("auth")).token;
@@ -43,7 +42,7 @@ const FormWrapper = () => {
       .then((res) => {
         setIsLoading(false);
         toast.success(res.data.message);
-        location.href = "/my-events";
+        window.location.href = "/my-events";
       })
       .catch((error) => {
         setIsLoading(false);
