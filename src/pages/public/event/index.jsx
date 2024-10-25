@@ -7,6 +7,7 @@ import { eventDummy } from "../../../../data";
 import GetTicketModal from "./components/GetTicketModal";
 
 const EventDetails = () => {
+  const hostId = JSON.parse(localStorage.getItem("auth")).user.id;
   const location = useLocation();
   const [event, setEvent] = useState(location.state);
   const [isShowingGetTicketModal, setIsShowingGetTicketModal] = useState(false);
@@ -56,12 +57,14 @@ const EventDetails = () => {
                 <h1 className="mb-2">{event.event_name}</h1>
                 <p className="max-w-[40ch]">{event.event_description}</p>
               </div>
-              <button
-                onClick={() => setIsShowingGetTicketModal(true)}
-                className="btn btn-accent"
-              >
-                Get tickets - <span className="font-bold">&#8358;5000</span>
-              </button>
+              {event.host_id !== hostId && (
+                <button
+                  onClick={() => setIsShowingGetTicketModal(true)}
+                  className="btn btn-accent"
+                >
+                  Get tickets - <span className="font-bold">&#8358;5000</span>
+                </button>
+              )}
             </div>
 
             <div className="flex items-start gap-8">
@@ -89,6 +92,10 @@ const EventDetails = () => {
           <section className="w-4/5 mx-auto mt-8">
             <h3>Photos</h3>
             <div className="flex flex-wrap gap-2 mt-4">
+              {!event.event_images1 &&
+                !event.event_images2 &&
+                !event.event_images3 &&
+                !event.event_images4 && <p>No photos</p>}
               {event.event_images1 && (
                 <img
                   src={event.event_images1}
