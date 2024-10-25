@@ -11,10 +11,15 @@ const EventDetails = () => {
   const [event, setEvent] = useState(location.state);
   const [isShowingGetTicketModal, setIsShowingGetTicketModal] = useState(false);
 
+  const pathname = location.pathname;
+  const eventId = pathname.substring(pathname.lastIndexOf("/event/") + 7);
+
   useEffect(() => {
     if (!location.state) {
       axios
-        .get("https://api.iventverse.com/v1/events/getting_event_by_id/1/")
+        .get(
+          `https://development.api.iventverse.com/v1/events/getting_event_by_id/${eventId}/`
+        )
         .then((res) => {
           setEvent(res.data.data[0]);
         })
@@ -23,6 +28,10 @@ const EventDetails = () => {
         );
     }
   }, []);
+
+  useEffect(() => {
+    console.log(event);
+  }, [event]);
 
   return (
     <>
