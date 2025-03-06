@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   return {
     define: {
-      "process.env.BASE_URL": JSON.stringify(env.BASE_URL),
+      "process.env.API_BASE_URL": JSON.stringify(env.API_BASE_URL),
     },
     plugins: [react()],
   };

@@ -31,7 +31,7 @@ const Profile = () => {
     setIsLoading(true);
     axios
       .patch(
-        `${process.env.BASE_URL}/auth/user_profile/${auth.user.id}/`,
+        `${process.env.API_BASE_URL}/auth/user_profile/${auth.user.id}/`,
         values
       )
       .then((res) => {

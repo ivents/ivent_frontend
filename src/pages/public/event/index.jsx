@@ -57,12 +57,19 @@ const EventDetails = () => {
                 <h1 className="mb-2">{event.event_name}</h1>
                 <p className="max-w-[40ch]">{event.event_description}</p>
               </div>
-              {event.host_id !== hostId && (
+              {event.host_id !== hostId ? (
                 <button
                   onClick={() => setIsShowingGetTicketModal(true)}
                   className="btn btn-accent"
                 >
                   Get tickets - <span className="font-bold">&#8358;5000</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => setIsShowingGetTicketModal(true)}
+                  className="btn btn-accent"
+                >
+                  Create tickets
                 </button>
               )}
             </div>

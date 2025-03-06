@@ -18,7 +18,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.BASE_URL}/events/all_created_events/`)
+      .get(`${process.env.API_BASE_URL}/events/all_created_events/`)
       .then((res) => {
         setEvents(res.data.data);
       })
@@ -34,7 +34,7 @@ const Home = () => {
 
     axios
       .get(
-        `${process.env.BASE_URL}/events/search/?search=${searchFormData.searchQuery}&event_city=${searchFormData.city}`
+        `${process.env.API_BASE_URL}/events/search/?search=${searchFormData.searchQuery}&event_city=${searchFormData.city}`
       )
       .then((res) => {
         setEvents(res.data);

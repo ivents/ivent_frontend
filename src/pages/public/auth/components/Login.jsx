@@ -21,7 +21,7 @@ const Login = ({ setVisibleComponent, prevPage }) => {
   const onSubmit = (values) => {
     setIsLoading(true);
     axios
-      .post("https://api.iventverse.com/v1/auth/signin/", values)
+      .post(`${process.env.API_BASE_URL}/auth/signin/`, values)
       .then((res) => {
         localStorage.setItem(
           "auth",
