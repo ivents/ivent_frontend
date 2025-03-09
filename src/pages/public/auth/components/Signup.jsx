@@ -25,7 +25,7 @@ const Signup = ({ setVisibleComponent, prevPage }) => {
   const onSubmit = (values) => {
     setIsLoading(true);
     axios
-      .post("https://api.iventverse.com/v1/auth/signup/", {
+      .post(`${process.env.API_BASE_URL}/auth/signup/`, {
         first_name: values.first_name,
         last_name: values.last_name,
         email: values.email,
