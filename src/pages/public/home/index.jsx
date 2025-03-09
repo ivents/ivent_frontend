@@ -15,15 +15,22 @@ const Home = () => {
     city: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    setIsLoading(true);
+    setError(null);
     axios
       .get(`${process.env.API_BASE_URL}/events/all_created_events/`)
       .then((res) => {
-        setEvents(res.data.data);
+        setEvents(res.data.data || []);
+        setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Error fetching events:", error);
+        setError("Failed to load events. Please try again later.");
+        setEvents([]);
+        setIsLoading(false);
       });
   }, []);
 
@@ -58,6 +65,8 @@ const Home = () => {
         setSearchFormData={setSearchFormData}
       />
 
+      {error && <div className="text-red-500 text-center my-4">{error}</div>}
+
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-4/5 mx-auto">
         {isLoading ? (
           <EventGridSkeleton />
@@ -71,9 +80,9 @@ const Home = () => {
             <EventGridSkeleton />
           )
         ) : (
-          events.map((event) => (
-            <EventCard key={event.event_id} event={event} />
-          ))
+          events.map(
+            (event) => event && <EventCard key={event.event_id} event={event} />
+          )
         )}
       </div>
       <Footer />
