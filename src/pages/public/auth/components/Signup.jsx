@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import TextError from "../../../../components/TextError";
@@ -35,7 +35,7 @@ const Signup = ({ setVisibleComponent, prevPage }) => {
       .then((res) => {
         toast.success("Account created successfully. Logging you in...");
         axios
-          .post("https://api.iventverse.com/v1/auth/signin/", {
+         .post(`${process.env.API_BASE_URL}/auth/signin/`, {
             email: values.email,
             password: values.password,
           })

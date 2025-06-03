@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import MyEventItem from "./components/MyEventItem";
+// import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import EventCard from "../../../components/EventCard";

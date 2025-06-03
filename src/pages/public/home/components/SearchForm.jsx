@@ -9,7 +9,7 @@ const SearchForm = ({ handleSearch, setSearchFormData, searchFormData }) => {
       <div className="w-full">
         <label htmlFor="search_query">Search events</label>
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2" />
+          <Search className="absolute left-4 p-96 top-1/2  -translate-y-1/2" />
           <input
             onChange={(e) =>
               setSearchFormData({

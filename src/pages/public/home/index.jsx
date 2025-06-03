@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { EventGridSkeleton } from "./components/Skeletons";
 import axios from "axios";
-import { FindInPageOutlined, Search } from "@mui/icons-material";
+import { FindInPageOutlined } from "@mui/icons-material";
 import EventCard from "../../../components/EventCard";
 import Footer from "../../../components/Footer";
 import SearchForm from "./components/SearchForm";
