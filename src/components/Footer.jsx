@@ -85,7 +85,7 @@ const Footer = () => {
           </Link>
         </div>
 
-        <p>&copy; Iventverse 2023</p>
+        <p>&copy; Iventverse 2025</p>
       </div>
     </footer>
   );

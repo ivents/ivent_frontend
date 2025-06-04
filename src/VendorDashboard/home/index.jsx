@@ -1,0 +1,93 @@
+import { useEffect, useState } from "react";
+
+import { EventGridSkeleton } from "./components/Skeletons";
+import axios from "axios";
+import { FindInPageOutlined } from "@mui/icons-material";
+import EventCard from "../../../src/components/EventCard";
+import Footer from "../../../src/components/Footer";
+import SearchForm from "./components/SearchForm";
+import { useDebouncedCallback } from "use-debounce";
+
+const Users = () => {
+  const [events, setEvents] = useState([]);
+  const [searchFormData, setSearchFormData] = useState({
+    searchQuery: "",
+    city: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+    axios
+      .get(`${process.env.API_BASE_URL}/events/all_created_events/`)
+      .then((res) => {
+        setEvents(res.data.data || []);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+        setError("Failed to load events. Please try again later.");
+        setEvents([]);
+        setIsLoading(false);
+      });
+  }, []);
+
+  const handleSearch = useDebouncedCallback((e) => {
+    console.log(searchFormData);
+
+    setIsLoading(true);
+
+    axios
+      .get(
+        `${process.env.API_BASE_URL}/events/search/?search=${searchFormData.searchQuery}&event_city=${searchFormData.city}`
+      )
+      .then((res) => {
+        setEvents(res.data);
+        setIsLoading(false);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log("An error occurred: " + error);
+        setIsLoading(false);
+      });
+  }, 500);
+
+  return (
+    <main>
+      {/* <HeaderCarousel /> */}
+      <div className="w-full h-[30vh] bg-gray-300 mb-8" />
+
+      <SearchForm
+        handleSearch={handleSearch}
+        searchFormData={searchFormData}
+        setSearchFormData={setSearchFormData}
+      />
+
+      {error && <div className="text-red-500 text-center my-4">{error}</div>}
+
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-4/5 mx-auto">
+        {isLoading ? (
+          <EventGridSkeleton />
+        ) : events.length === 0 ? (
+          searchFormData.searchQuery && searchFormData.city ? (
+            <div>
+              <FindInPageOutlined />
+              <p>No events match your search</p>
+            </div>
+          ) : (
+            <EventGridSkeleton />
+          )
+        ) : (
+          events.map(
+            (event) => event && <EventCard key={event.event_id} event={event} />
+          )
+        )}
+      </div>
+      <Footer />
+    </main>
+  );
+};
+
+export default Home;

@@ -1,6 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import { UserModeProvider } from "./contexts/UserModeContext";
 
 import Layout from "./layout";
+import Users  from "../src/VendorDashboard/home/index";
 import Home from "./pages/public/home";
 import Auth from "./pages/public/auth";
 import { PrivateRoutesLayout } from "./pages/private/layout";
@@ -21,8 +24,10 @@ import GetApp from "./pages/public/get-app";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <ThemeProvider>
+      <UserModeProvider>
+        <BrowserRouter>
+        <Routes>
         <Route path="/auth" element={<Auth />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -42,9 +47,12 @@ function App() {
           <Route path="/my-events" element={<MyEvents />} />
           <Route path="/tickets" element={<Tickets />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/dashboard" element={<Users />} />
         </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+        </BrowserRouter>
+      </UserModeProvider>
+    </ThemeProvider>
   );
 }
 
