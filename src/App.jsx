@@ -3,7 +3,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { UserModeProvider } from "./contexts/UserModeContext";
 
 import Layout from "./layout";
-import Users  from "../src/VendorDashboard/home/index";
+import UserDashboard  from "./components/UserDashboard";
 import Home from "./pages/public/home";
 import Auth from "./pages/public/auth";
 import { PrivateRoutesLayout } from "./pages/private/layout";
@@ -47,7 +47,7 @@ function App() {
           <Route path="/my-events" element={<MyEvents />} />
           <Route path="/tickets" element={<Tickets />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/dashboard" element={<Users />} />
+          <Route path="/dashboard" element={<UserDashboard />} />
         </Route>
         </Routes>
         </BrowserRouter>
