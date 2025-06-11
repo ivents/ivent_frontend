@@ -1,5 +1,4 @@
 import { ErrorMessage,  Form, Formik } from "formik";
-import TextError from "../../../../../components/TextError";
 import { ArrowBackOutlined, CheckOutlined } from "@mui/icons-material";
 import LoadingSpinner from "../../../../../components/LoadingSpinner";
 import * as Yup from "yup";
@@ -33,7 +32,7 @@ const StepTwo = (props) => {
                 setFieldValue("event_background", event.currentTarget.files[0]);
               }}
             />
-            <ErrorMessage name="event_background" component={TextError} />
+            <ErrorMessage name="event_background" component="div" className="text-red-500 text-sm mt-1" />
           </div>
 
           <h3 className="mb-4">Other event images</h3>
@@ -50,7 +49,7 @@ const StepTwo = (props) => {
                 setFieldValue("event_images1", event.currentTarget.files[0]);
               }}
             />
-            <ErrorMessage name="event_images1" component={TextError} />
+            <ErrorMessage name="event_images1" component="div" className="text-red-500 text-sm mt-1" />
           </div>
 
           <div className="mb-4">
@@ -65,7 +64,7 @@ const StepTwo = (props) => {
                 setFieldValue("event_images2", event.currentTarget.files[0]);
               }}
             />
-            <ErrorMessage name="event_images2" component={TextError} />
+            <ErrorMessage name="event_images2" component="div" className="text-red-500 text-sm mt-1" />
           </div>
 
           <div className="mb-4">
@@ -80,7 +79,7 @@ const StepTwo = (props) => {
                 setFieldValue("event_images3", event.currentTarget.files[0]);
               }}
             />
-            <ErrorMessage name="event_images3" component={TextError} />
+            <ErrorMessage name="event_images3" component="div" className="text-red-500 text-sm mt-1" />
           </div>
 
           <div className="mb-4">
@@ -95,7 +94,7 @@ const StepTwo = (props) => {
                 setFieldValue("event_images4", event.currentTarget.files[0]);
               }}
             />
-            <ErrorMessage name="event_images4" component={TextError} />
+            <ErrorMessage name="event_images4" component="div" className="text-red-500 text-sm mt-1" />
           </div>
 
           <div className="flex items-center justify-end gap-4">

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import TextError from "../../../../components/TextError";
 import axios from "axios";
 import LoadingSpinner from "../../../../components/LoadingSpinner";
 import { toast, ToastContainer } from "react-toastify";
@@ -101,7 +100,7 @@ const Signup = ({ setVisibleComponent, prevPage }) => {
               placeholder="e.g. John"
               required
             />
-            <ErrorMessage name="first_name" component={TextError} />
+            <ErrorMessage name="first_name" component="div" className="text-red-500 text-sm mt-1" />
           </div>
 
           <div>
@@ -114,7 +113,7 @@ const Signup = ({ setVisibleComponent, prevPage }) => {
               placeholder="e.g. Doe"
               required
             />
-            <ErrorMessage name="last_name" component={TextError} />
+            <ErrorMessage name="last_name" component="div" className="text-red-500 text-sm mt-1" />
           </div>
         </div>
 
@@ -128,7 +127,7 @@ const Signup = ({ setVisibleComponent, prevPage }) => {
             placeholder="e.g. email@gmail.com"
             required
           />
-          <ErrorMessage name="email" component={TextError} />
+          <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
         </div>
 
         <div className="mb-4">
@@ -141,7 +140,7 @@ const Signup = ({ setVisibleComponent, prevPage }) => {
             placeholder="Type your home address here"
             required
           />
-          <ErrorMessage name="home_address" component={TextError} />
+          <ErrorMessage name="home_address" component="div" className="text-red-500 text-sm mt-1" />
         </div>
 
         <div className="mb-4">
@@ -163,7 +162,7 @@ const Signup = ({ setVisibleComponent, prevPage }) => {
               {isShowingPassword ? "HIDE" : "SHOW"}
             </button>
           </div>
-          <ErrorMessage name="password" component={TextError} />
+          <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
         </div>
 
         <div className="mb-4">
@@ -176,7 +175,7 @@ const Signup = ({ setVisibleComponent, prevPage }) => {
             placeholder="********"
             required
           />
-          <ErrorMessage name="confirm_password" component={TextError} />
+          <ErrorMessage name="confirm_password" component="div" className="text-red-500 text-sm mt-1" />
         </div>
 
         <div className="text-center mt-6">

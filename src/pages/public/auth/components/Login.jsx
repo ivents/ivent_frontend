@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import TextError from "../../../../components/TextError";
 import axios from "axios";
 import LoadingSpinner from "../../../../components/LoadingSpinner";
 import { toast, ToastContainer } from "react-toastify";
@@ -68,7 +67,7 @@ const Login = ({ setVisibleComponent, prevPage }) => {
             placeholder="e.g. email@gmail.com"
             required
           />
-          <ErrorMessage name="email" component={TextError} />
+          <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
         </div>
         <div className="mb-4">
           <div className="relative">
@@ -91,7 +90,7 @@ const Login = ({ setVisibleComponent, prevPage }) => {
             </button>
           </div>
 
-          <ErrorMessage name="password" component={TextError} />
+          <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
         </div>
         <Link
           to="/"

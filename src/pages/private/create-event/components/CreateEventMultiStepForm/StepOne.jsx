@@ -1,5 +1,4 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import TextError from "../../../../../components/TextError";
 import { ArrowForwardOutlined } from "@mui/icons-material";
 import * as Yup from "yup";
 
@@ -36,7 +35,7 @@ const StepOne = (props) => {
             placeholder="Type the name of your event here"
             required
           />
-          <ErrorMessage name="event_name" component={TextError} />
+          <ErrorMessage name="event_name" component="div" className="text-red-500 text-sm mt-1" />
         </div>
 
         <div className="mb-4">
@@ -48,7 +47,7 @@ const StepOne = (props) => {
             placeholder="Provide a short description of your event"
             required
           />
-          <ErrorMessage name="event_description" component={TextError} />
+          <ErrorMessage name="event_description" component="div" className="text-red-500 text-sm mt-1" />
         </div>
 
         <div className="mb-4">
@@ -60,7 +59,7 @@ const StepOne = (props) => {
             placeholder="Where is your event happening?"
             required
           />
-          <ErrorMessage name="event_venue" component={TextError} />
+          <ErrorMessage name="event_venue" component="div" className="text-red-500 text-sm mt-1" />
         </div>
 
         <div className="mb-4">
@@ -79,7 +78,7 @@ const StepOne = (props) => {
             <option value="lagos">Lagos</option>
             <option value="portharcourt">Port Harcourt</option>
           </Field>
-          <ErrorMessage name="event_city" component={TextError} />
+          <ErrorMessage name="event_city" component="div" className="text-red-500 text-sm mt-1" />
         </div>
 
         <button type="submit" className="flex items-center gap-1 ml-auto">

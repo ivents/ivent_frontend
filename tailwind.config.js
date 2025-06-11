@@ -9,7 +9,7 @@ export default {
         accent: "#884dff",
       },
       backgroundColor: {
-        dark: '#121212',
+        dark: '#000000',
       },
     },
   },
