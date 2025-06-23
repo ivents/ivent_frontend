@@ -18,38 +18,62 @@ const Home = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setIsLoading(true);
-    setError(null);
-    axios
-      .get(`${process.env.API_BASE_URL}/events/all_created_events/`)
-      .then((res) => {
-        setEvents(res.data.data || []);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching events:", error);
-        setError("Failed to load events. Please try again later.");
+    const fetchEvents = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        console.log('Fetching events from:', '/api/events/all_created_events/');
+        const response = await axios.get('/api/events/all_created_events/');
+        console.log('Events response:', response);
+        setEvents(response.data.data || []);
+      } catch (error) {
+        console.error('Error fetching events:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status,
+          config: {
+            url: error.config?.url,
+            method: error.config?.method,
+            headers: error.config?.headers
+          }
+        });
+        setError(`Failed to load events. ${error.response?.data?.message || 'Please try again later.'}`);
         setEvents([]);
+      } finally {
         setIsLoading(false);
-      });
+      }
+    };
+
+    fetchEvents();
   }, []);
 
   const handleSearch = useDebouncedCallback((e) => {
-    console.log(searchFormData);
-
+    console.log('Searching with:', searchFormData);
     setIsLoading(true);
 
     axios
       .get(
-        `${process.env.API_BASE_URL}/events/search/?search=${searchFormData.searchQuery}&event_city=${searchFormData.city}`
+        `/api/events/search/`,
+        {
+          params: {
+            search: searchFormData.searchQuery,
+            event_city: searchFormData.city
+          }
+        }
       )
       .then((res) => {
+        console.log('Search results:', res.data);
         setEvents(res.data);
-        setIsLoading(false);
-        console.log(res.data);
       })
       .catch((error) => {
-        console.log("An error occurred: " + error);
+        console.error('Search error:', {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status
+        });
+        setError('Failed to search events. Please try again.');
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   }, 500);

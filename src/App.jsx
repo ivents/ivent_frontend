@@ -31,10 +31,12 @@ import Profile from "./pages/private/profile";
 
 // Vendor Pages
 import VendorDashboard from "./pages/vendor/home/VendorDashboard";
-import VendorEvents from "./pages/vendor/my-events";
-import VendorTickets from "./pages/vendor/tickets";
+import VendorHome from "./pages/vendor/home/index";
+import VendorEventListing from "./pages/vendor/eventlisting";
 import VendorProfile from "./pages/vendor/profile";
-
+import VendorTicketManagement from "./pages/vendor/ticketmanagement";
+import Help from "./pages/vendor/Help";
+  
 // Protected Route Component
 const ProtectedRoute = ({ children, requireVendor = false }) => {
   console.log('ProtectedRoute - Checking access...');
@@ -103,6 +105,7 @@ function App() {
               <Route path="dashboard" element={<UserDashboard />} />
               <Route path="create-event" element={<CreateEvent />} />
               <Route path="my-events" element={<MyEvents />} />
+              <Route path="ticketmanagement" element={<VendorTicketManagement />} />
               <Route path="tickets" element={<Tickets />} />
               <Route path="profile" element={<Profile />} />
             </Route>
@@ -115,10 +118,12 @@ function App() {
             }>
               <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<VendorDashboard />} />
-              <Route path="events" element={<VendorEvents />} />
+              <Route path="events" element={<VendorHome />} />
               <Route path="create-event" element={<CreateEvent vendorMode={true} />} />
-              <Route path="tickets" element={<VendorTickets />} />
+              <Route path="eventlisting" element={<VendorEventListing />} />
+              <Route path="ticketmanagement" element={<VendorTicketManagement />} />
               <Route path="profile" element={<VendorProfile />} />
+              <Route path="help" element={<Help />} />
               <Route path="*" element={<Navigate to="dashboard" replace />} />
             </Route>
 

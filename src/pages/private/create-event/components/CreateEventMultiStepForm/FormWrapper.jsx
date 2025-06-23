@@ -33,6 +33,7 @@ const FormWrapper = () => {
   const makeRequest = (formData) => {
     setIsLoading(true);
     axios
+   
       .post(`${process.env.API_BASE_URL}/events/create_event/`, formData, {
         headers: {
           Authorization: `Token ${token}`,

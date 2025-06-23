@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { EventGridSkeleton } from "./components/Skeletons";
 import axios from "axios";
 import { FindInPageOutlined } from "@mui/icons-material";
-import EventCard from "../../../../User/components/EventCard";
-import Footer from "../../../../User/components/Footer";
+import EventCard from "../../../components/EventCard";
+import Footer from "../../../components/Footer";
 import SearchForm from "./components/SearchForm";
 import { useDebouncedCallback } from "use-debounce";
 
-const Home = () => {
+const VendorHome = () => {
   const [events, setEvents] = useState([]);
   const [searchFormData, setSearchFormData] = useState({
     searchQuery: "",
@@ -21,9 +21,9 @@ const Home = () => {
     setIsLoading(true);
     setError(null);
     axios
-      .get(`${process.env.API_BASE_URL}/events/all_created_events/`)
+      .get(`${process.env.API_BASE_URL}/api/v1/events/`)
       .then((res) => {
-        setEvents(res.data.data || []);
+        setEvents(res.data || []);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -90,4 +90,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default VendorHome;

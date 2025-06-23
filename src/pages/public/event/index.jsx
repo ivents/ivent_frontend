@@ -19,7 +19,7 @@ const EventDetails = () => {
     if (!location.state) {
       axios
         .get(
-          `https://development.api.iventverse.com/v1/events/getting_event_by_id/${eventId}/`
+          `${process.env.API_BASE_URL}/events/getting_event_by_id/${eventId}/`
         )
         .then((res) => {
           setEvent(res.data.data[0]);

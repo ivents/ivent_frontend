@@ -13,8 +13,13 @@ import {
   DarkModeOutlined,
   AnalyticsOutlined,
   AddCircleOutlineOutlined,
-  ConfirmationNumberOutlined,
-  PeopleAltOutlined
+  ConfirmationNumberOutlined, 
+  PeopleAltOutlined,
+  CampaignOutlined,
+  HelpCenterOutlined,
+  AccountBalanceWalletOutlined,
+  GroupsOutlined,
+  SupportOutlined
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../contexts/ThemeContext';
@@ -62,17 +67,7 @@ const VendorLayout = () => {
     { 
       to: '/vendor/dashboard', 
       icon: <DashboardOutlined />, 
-      label: 'Dashboard' 
-    },
-    { 
-      to: '/vendor/profile', 
-      icon: <PersonOutlined />, 
-      label: 'Profile' 
-    },
-    { 
-      to: '/vendor/events', 
-      icon: <EventOutlined />, 
-      label: 'Events' 
+      label: 'Overview' 
     },
     { 
       to: '/vendor/create-event', 
@@ -80,25 +75,29 @@ const VendorLayout = () => {
       label: 'Create Event' 
     },
     { 
-      to: '/vendor/tickets', 
+      to: '/vendor/eventlisting', 
       icon: <ConfirmationNumberOutlined />, 
-      label: 'Tickets' 
+      label: 'Event Listing' 
     },
     { 
-      to: '/vendor/attendees', 
-      icon: <PeopleAltOutlined />, 
-      label: 'Attendees' 
+      to: '/vendor/ticketmanagement', 
+      icon: <AnalyticsOutlined />, 
+      label: 'Ticket Management' 
     },
     { 
       to: '/vendor/analytics', 
       icon: <AnalyticsOutlined />, 
-      label: 'Analytics' 
+      label: 'Analysis and Report' 
     },
-    
+    // {  
+    //   to: '/vendor/settings', 
+    //   icon: <CampaignOutlined />, 
+    //   label: 'Marketing' 
+    // },
     { 
-      to: '/vendor/settings', 
-      icon: <SettingsOutlined />, 
-      label: 'Settings' 
+      to: '/vendor/help', 
+      icon: <HelpCenterOutlined />, 
+      label: 'Help & Support' 
     },
   ];
 
@@ -160,7 +159,7 @@ const VendorLayout = () => {
       </aside>
 
       {/* Navbar */}
-      <nav className="fixed top-0 right-0 z-20 w-full md:pl-64 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-700">
+      <nav className="sticky top-0 p-0 right-0 z-50 w-full md:pl-64 dark:bg-black">
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center">
             <button
@@ -169,11 +168,10 @@ const VendorLayout = () => {
             >
               <MenuOutlined />
             </button>
-            <h1 className="text-xl font-semibold text-black dark:text-white">
-              {navItems.find(item => item.to === location.pathname)?.label || 'Dashboard'}
-            </h1>
+            {/* Page title removed as per user request */}
           </div>
           
+          {/**light/dark mode */}
           <div className="flex items-center space-x-4">
             <button
               onClick={toggleTheme}
@@ -199,54 +197,108 @@ const VendorLayout = () => {
               
               {isProfileMenuOpen && (
                 <div 
-                  className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50 border border-gray-200 dark:border-gray-700"
+                  className="absolute right-0 mt-2 w-64 bg-slate-800 dark:bg-slate-800 rounded-xl shadow-xl py-4 z-50"
                   onMouseLeave={() => setIsProfileMenuOpen(false)}
                 >
-                  <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      {auth?.user?.name || 'User'}
+                  {/* User info header */}
+                  <div className="px-6 py-3 mb-2">
+                    <p className="text-base font-medium text-white">
+                      User
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                      {auth?.user?.email || ''}
+                    <p className="text-sm text-slate-400 truncate">
+                      {auth?.user?.email || 'jeffibezoo.001@gmail.com'}
                     </p>
                   </div>
                   
-                  {/* User/Vendor Toggle */}
-                  <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
+                  {/* Menu Items */}
+                  <div className="space-y-1">
+                    <Link
+                      to="/vendor/profile"
+                      className="flex items-center px-6 py-3 text-white hover:bg-slate-700 transition-colors"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                    >
+                      <PersonOutlined className="mr-4 text-white w-5 h-5" /> 
+                      <span className="text-base">Profile</span>
+                    </Link>
+                    
+                    <Link
+                      to="/vendor/wallet"
+                      className="flex items-center px-6 py-3 text-white hover:bg-slate-700 transition-colors"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                    >
+                      <AccountBalanceWalletOutlined className="mr-4 text-white w-5 h-5" /> 
+                      <span className="text-base">Wallet</span>
+                    </Link>
+                    
+                    {/* <Link
+                      to="/vendor/community"
+                      className="flex items-center px-6 py-3 text-white hover:bg-slate-700 transition-colors"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                    >
+                      <GroupsOutlined className="mr-4 text-white w-5 h-5" /> 
+                      <span className="text-base">Community</span>
+                    </Link> */}
+                    
+                    {/* <Link
+                      to="/vendor/support"
+                      className="flex items-center px-6 py-3 text-white hover:bg-slate-700 transition-colors"
+                      onClick={() => setIsProfileMenuOpen(false)}
+                    >
+                      <SupportOutlined className="mr-4 text-white w-5 h-5" /> 
+                      <span className="text-base">Support</span>
+                    </Link> */}
+                  </div>
+                  
+                  {/* Toggle Section */}
+                  <div className="px-6 py-4 space-y-4">
+                    {/* Switch to User Mode */}
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Vendor Mode</span>
+                      <div className="flex items-center">
+                        <PeopleAltOutlined className="mr-4 text-white w-5 h-5" />
+                        <div>
+                          <span className="text-white text-base block">Switch to User</span>
+                          <span className="text-white text-base block">Mode</span>
+                        </div>
+                      </div>
                       <button
                         onClick={() => {
                           navigate('/Home');
                         }}
-                        className="relative inline-flex h-6 w-11 items-center rounded-full bg-accent"
+                        className="relative inline-flex h-6 w-12 items-center rounded-full bg-purple-600 transition-colors"
                       >
-                        <span className="inline-block h-4 w-4 transform translate-x-6 rounded-full bg-white transition-transform" />
+                        <span className="inline-block h-4 w-4 transform translate-x-7 rounded-full bg-white transition-transform" />
                       </button>
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Switch back to user mode</p>
+                    
+                    {/* Light Mode Toggle */}
+                    {/* <div className="flex items-center justify-between"> */}
+                      {/* <div className="flex items-center">
+                        <LightModeOutlined className="mr-4 text-white w-5 h-5" />
+                        <span className="text-white text-base">Light Mode</span>
+                      </div> */}
+                      {/* <button
+                        onClick={toggleTheme}
+                        className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors ${
+                          theme === 'light' ? 'bg-purple-600' : 'bg-gray-500'
+                        }`}
+                      >
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          theme === 'light' ? 'translate-x-7' : 'translate-x-1'
+                        }`} />
+                      </button> */}
+                    {/* </div> */}
                   </div>
                   
-                  <Link
-                    to="/vendor/profile"
-                    className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-                    onClick={() => setIsProfileMenuOpen(false)}
-                  >
-                    <PersonOutlined className="mr-3 text-gray-500" /> Profile
-                  </Link>
-                  <Link
-                    to="/vendor/settings"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    onClick={() => setIsProfileMenuOpen(false)}
-                  >
-                    <SettingsOutlined className="mr-2" /> Settings
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center"
-                  >
-                    <LogoutOutlined className="mr-2" /> Logout
-                  </button>
+                  {/* Logout */}
+                  <div className="px-6 pt-2">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left flex items-center py-3 text-red-400 hover:bg-slate-700 transition-colors rounded-lg px-0"
+                    >
+                      <LogoutOutlined className="mr-4 w-5 h-5" /> 
+                      <span className="text-base">Log out</span>
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

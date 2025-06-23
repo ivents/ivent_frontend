@@ -7,6 +7,7 @@ export default {
       colors: {
         grey: "#bdbdbd",
         accent: "#884dff",
+        ivent: "#22123d",
       },
       backgroundColor: {
         dark: '#000000',

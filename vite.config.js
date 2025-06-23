@@ -9,5 +9,27 @@ export default defineConfig(({ mode }) => {
       "process.env.API_BASE_URL": JSON.stringify(env.API_BASE_URL),
     },
     plugins: [react()],
+    server: {
+      proxy: {
+        '/api': {
+          target: 'https://development-api.iventverse.com',
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path.replace(/^\/api/, '')
+        },
+        '/events': {
+          target: 'https://development-api.iventverse.com',
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path
+        },
+        '/auth': {
+          target: 'https://development-api.iventverse.com',
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path
+        }
+      }
+    }
   };
 });
