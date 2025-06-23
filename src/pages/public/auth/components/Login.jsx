@@ -43,6 +43,7 @@ const Login = ({ setVisibleComponent, prevPage }) => {
         })
       );
       toast.success("Logged in successfully! (Demo mode)");
+      // Redirect to main dashboard after successful login
       prevPage ? navigate(prevPage) : navigate("/");
       setIsLoading(false);
     }, 1000);
