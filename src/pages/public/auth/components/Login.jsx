@@ -11,12 +11,45 @@ const Login = ({ setVisibleComponent, prevPage }) => {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isShowingPassword, setIsShowingPassword] = useState(false);
 
   const initialValues = {
     email: "",
     password: "",
   };
 
+  const validationSchema = Yup.object({
+    email: Yup.string().email("Invalid email format").required("Required"),
+    password: Yup.string()
+      .min(8, "Password is too short - should be 8 characters minimum.")
+      .required("Required"),
+  });
+
+  // Simulate successful login without backend
+  const onSubmit = (values) => {
+    setIsLoading(true);
+    // Simulate API call delay
+    setTimeout(() => {
+      localStorage.setItem(
+        "auth",
+        JSON.stringify({ 
+          token: "dummy-token-for-development", 
+          user: { 
+            id: 1, 
+            email: values.email,
+            name: values.email.split('@')[0],
+            is_vendor: false
+          } 
+        })
+      );
+      toast.success("Logged in successfully! (Demo mode)");
+      prevPage ? navigate(prevPage) : navigate("/");
+      setIsLoading(false);
+    }, 1000);
+  };
+
+  // Original API call code (commented out)
+  /*
   const onSubmit = (values) => {
     setIsLoading(true);
     axios
@@ -33,19 +66,10 @@ const Login = ({ setVisibleComponent, prevPage }) => {
       .catch((error) => {
         console.log("an error occurred", error);
         setIsLoading(false);
-        toast.error(error.response.data.non_field_errors[0]);
+        toast.error(error.response?.data?.non_field_errors?.[0] || "An error occurred during login");
       });
   };
-
-  const validationSchema = Yup.object({
-    email: Yup.string().email("Invalid email format").required("Required"),
-    password: Yup.string()
-      .min(8, "Password is too short - should be 8 characters minimum.")
-      .required("Required"),
-  });
-
-  // state to store if the password is showing or not
-  const [isShowingPassword, setIsShowingPassword] = useState(false);
+  */
 
   return (
     <Formik
