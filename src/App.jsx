@@ -11,6 +11,7 @@ import VendorLayout from "./pages/vendor/layout";
 // Public Pages
 import Home from "./pages/public/home";
 import Auth from "./pages/public/auth";
+import VendorAuth from "./pages/public/vendor-auth";
 import EventDetails from "./pages/public/event";
 import AboutUs from "./pages/public/about-us";
 import Careers from "./pages/public/careers";
@@ -22,8 +23,7 @@ import GetHelp from "./pages/public/get-help";
 import Pricing from "./pages/public/pricing";
 import GetApp from "./pages/public/get-app";
 
-// Private User Pages
-import UserDashboard from "./components/UserDashboard";
+// User Pages
 import CreateEvent from "./pages/private/create-event";
 import MyEvents from "./pages/private/my-events";
 import Tickets from "./pages/private/tickets";
@@ -34,6 +34,7 @@ import VendorDashboard from "./pages/vendor/home/VendorDashboard";
 import VendorHome from "./pages/vendor/home/index";
 import VendorEventListing from "./pages/vendor/eventlisting";
 import VendorProfile from "./pages/vendor/profile";
+import Analysis from "./pages/vendor/analysis-and-report";
 import VendorTicketManagement from "./pages/vendor/ticketmanagement";
 import Help from "./pages/vendor/Help";
   
@@ -57,7 +58,9 @@ const ProtectedRoute = ({ children, requireVendor = false }) => {
 
   if (requireVendor && !isVendor) {
     console.log('ProtectedRoute - Vendor access required but user is not a vendor');
-    return <Navigate to="/dashboard" />;
+    // Redirect to vendor auth with redirect back to intended page
+    const redirectUrl = "/vendor-auth?redirect=" + encodeURIComponent(window.location.pathname);
+    return <Navigate to={redirectUrl} />;
   }
 
   console.log('ProtectedRoute - Access granted');
@@ -74,13 +77,12 @@ function App() {
   return (
     <ThemeProvider>
       <UserModeProvider>
-        <BrowserRouter>
-   
-          <Routes>
+        <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="auth" element={<Auth />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/vendor-auth" element={<VendorAuth />} />
               <Route path="event/:id" element={<EventDetails />} />
               <Route path="about-us" element={<AboutUs />} />
               <Route path="careers" element={<Careers />} />
@@ -93,21 +95,17 @@ function App() {
               <Route path="get-app" element={<GetApp />} />
             </Route>
 
-            {/* Private User Routes */}
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <PrivateRoutesLayout />
-                </ProtectedRoute>
-              }
-            >
-              <Route path="dashboard" element={<UserDashboard />} />
-              <Route path="create-event" element={<CreateEvent />} />
-              <Route path="my-events" element={<MyEvents />} />
-              <Route path="ticketmanagement" element={<VendorTicketManagement />} />
-              <Route path="tickets" element={<Tickets />} />
-              <Route path="profile" element={<Profile />} />
+            {/* User Routes - Wrapped in a single PrivateRoutesLayout */}
+            <Route element={
+              <ProtectedRoute>
+                <PrivateRoutesLayout />
+              </ProtectedRoute>
+            }>
+              <Route path="/dashboard" element={<div>User Dashboard</div>} />
+              <Route path="/my-events" element={<MyEvents />} />
+              <Route path="/tickets" element={<Tickets />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/create-event" element={<CreateEvent />} />
             </Route>
 
             {/* Vendor Routes */}
@@ -122,6 +120,7 @@ function App() {
               <Route path="create-event" element={<CreateEvent vendorMode={true} />} />
               <Route path="eventlisting" element={<VendorEventListing />} />
               <Route path="ticketmanagement" element={<VendorTicketManagement />} />
+              <Route path="analysis-and-report" element={<Analysis />} />
               <Route path="profile" element={<VendorProfile />} />
               <Route path="help" element={<Help />} />
               <Route path="*" element={<Navigate to="dashboard" replace />} />
@@ -130,7 +129,6 @@ function App() {
             {/* 404 Route */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </BrowserRouter>
       </UserModeProvider>
     </ThemeProvider>
   );

@@ -22,10 +22,16 @@ export const PrivateRoutesLayout = () => {
     }
   }, []);
 
+  if (!auth?.token) {
+    return null; // Will be redirected by the effect
+  }
+
   return (
-    <>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navbar />
-      <Outlet />
-    </>
+      <main className="container mx-auto px-4 py-8">
+        <Outlet />
+      </main>
+    </div>
   );
 };

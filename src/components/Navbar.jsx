@@ -15,25 +15,44 @@ import {
   SortOutlined,
   SupportAgentOutlined,
   Wallet,
+  StorefrontOutlined,
 } from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "/logo.svg";
 import { useContext, useEffect, useState, useRef } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { UserModeContext } from "../contexts/UserModeContext";
-import Community from "../pages/public/community";
-import { useOnClickOutside } from "../hooks/useOnClickOutside";
-// import Blog from "../pages/public/blog";
+import useOnClickOutside from "../hooks/useOnClickOutside";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { theme, toggleTheme } = useContext(ThemeContext);
-  const { userMode, setUserMode } = useContext(UserModeContext);
+  const { userMode, toggleUserMode, isAuthenticated, isVendor } = useContext(UserModeContext);
 
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("auth")) || { user: { avatar: '', first_name: 'Guest' } });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  
+  // Handle user mode toggle with authentication check
+  const handleUserModeToggle = async () => {
+    try {
+      const newMode = await toggleUserMode();
+      
+      // If toggleUserMode returned a mode (meaning it didn't redirect)
+      if (newMode) {
+        if (newMode === 'vendor' && !location.pathname.startsWith('/vendor')) {
+          // If switching to vendor mode and not on a vendor page, go to vendor dashboard
+          navigate('/vendor/dashboard');
+        } else if (newMode === 'user' && location.pathname.startsWith('/vendor')) {
+          // If switching to user mode and on a vendor page, go to home
+          navigate('/');
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling user mode:', error);
+    }
+  };
   
   // Refs for handling outside clicks
   const profileMenuRef = useRef(null);
@@ -44,8 +63,16 @@ const Navbar = () => {
   useOnClickOutside(mobileMenuRef, () => setIsMenuOpen(false));
 
   const handleLogout = () => {
-    localStorage.removeItem("auth");
-    location.pathname === "/" ? navigate(0) : navigate("/");
+    if (userMode === 'vendor') {
+      // Switch to user mode without clearing auth
+      toggleUserMode('user');
+      // Redirect to client side
+      navigate('/');
+    } else {
+      // Regular user logout - clear all auth
+      localStorage.removeItem("auth");
+      location.pathname === "/" ? navigate(0) : navigate("/");
+    }
   };
 
   useEffect(() => {
@@ -57,24 +84,70 @@ const Navbar = () => {
       <Link to="/" className="flex-shrink-0">
         <img className="h-8 w-auto" src={logo} alt="Iventverse" />
       </Link>
+      
+      {/* Mobile menu button - Only show when authenticated */}
+      {auth?.token && (
+        <div className="md:hidden">
+          <button
+            type="button"
+            className="text-gray-300 hover:text-white focus:outline-none"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-expanded={isMenuOpen}
+          >
+            <span className="sr-only">Open main menu</span>
+            {isMenuOpen ? (
+              <CloseOutlined className="h-6 w-6" />
+            ) : (
+              <MenuOutlined className="h-6 w-6" />
+            )}
+          </button>
+        </div>
+      )}
 
       {!auth?.token ? (
-        <Link className="flex items-center gap-2 btn btn-accent" to="/auth">
-          <ExitToAppOutlined fontSize="inherit" />
-          <span className="text-sm">Log in</span>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link className="flex items-center gap-2 btn btn-accent" to="/auth">
+            <ExitToAppOutlined fontSize="inherit" />
+            <span className="text-sm">Log in</span>
+          </Link>
+          <Link 
+            to="/vendor-auth" 
+            className="flex items-center gap-2 btn btn-outline border-gray-600 hover:bg-gray-800/50"
+          >
+            <SupportAgentOutlined fontSize="inherit" />
+            <span className="text-sm">Vendor Login</span>
+          </Link>
+        </div>
       ) : (
         <>
           {/* Desktop menu */}
           <ul className="hidden md:flex items-center gap-1 lg:gap-3 ml-4">
             <li>
               <Link
-                to="/tickets"
-                className={`${location.pathname === "/tickets" && "text-accent"
-                  } flex items-center gap-2 btn hover:text-accent`}
+                to="/my-events"
+                className={`${location.pathname === "/my-events" ? "text-accent" : ""} flex items-center gap-2 btn hover:text-accent`}
               >
                 <ConfirmationNumberOutlined fontSize="inherit" />
-                <span className="text-sm">Tickets</span>
+                <span className="text-sm">My Events</span>
+              </Link>
+            </li>
+            
+            <li>
+              <Link
+                to="/ticket-purchase"
+                className={`${location.pathname.startsWith("/ticket-purchase") ? "text-accent" : ""} flex items-center gap-2 btn hover:text-accent`}
+              >
+                <ConfirmationNumberOutlined fontSize="inherit" />
+                <span className="text-sm">Buy Ticket</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/tickets" 
+                className={`${location.pathname === "/tickets" ? "text-accent" : ""} flex items-center gap-2 btn hover:text-accent`}
+              >
+                <ArticleOutlined fontSize="inherit" />
+                <span className="text-sm">My Tickets</span>
               </Link>
             </li>
 
@@ -160,20 +233,22 @@ const Navbar = () => {
                   {/* User/Vendor Toggle */}
                   <li>
                     <button
-                      onClick={() => {
-                        if (userMode === "user") {
-                          setUserMode("vendor");
-                          navigate("/vendor/dashboard");
-                        } else {
-                          setUserMode("user");
-                          navigate("/");
+                      onClick={async () => {
+                        try {
+                          await handleUserModeToggle();
+                          setIsProfileMenuOpen(false);
+                        } catch (error) {
+                          console.error('Error toggling user mode:', error);
                         }
-                        setIsProfileMenuOpen(false);
                       }}
                       className="w-full flex items-center justify-between btn hover:text-accent"
                     >
                       <div className="flex items-center gap-2">
-                        <People fontSize="inherit" />
+                        {userMode === "user" ? (
+                          <SupportAgentOutlined fontSize="inherit" />
+                        ) : (
+                          <PersonOutlined fontSize="inherit" />
+                        )}
                         <span className="text-sm">
                           {userMode === "user" ? "Switch to Vendor Mode" : "Switch to User Mode"}
                         </span>
@@ -207,58 +282,74 @@ const Navbar = () => {
                     </button>
                   </li>
 
-                  <li>
+                  {/* <li>
                     <button
                       onClick={handleLogout}
                       className="flex items-center gap-2 btn hover:text-red-400"
                     >
                       <LogoutOutlined fontSize="inherit" />
-                      <span className="text-sm">Log out</span>
+                      <span className="text-sm">
+                        {userMode === 'vendor' ? 'Exit Vendor Mode' : 'Log out'}
+                      </span>
                     </button>
-                  </li>
+                  </li> */}
                 </ul>
               )}
             </li>
           </ul>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => {
-              setIsMenuOpen(prev => !prev);
-              setIsProfileMenuOpen(false);
-            }}
-            className="md:hidden p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent"
-            aria-expanded={isMenuOpen}
-            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
-          >
-            {isMenuOpen ? (
-              <CloseOutlined className="h-6 w-6" />
-            ) : (
-              <MenuOutlined className="h-6 w-6" />
-            )}
-          </button>
-          
-          {/* Mobile menu */}
+          {/* Mobile menu - Fixed positioning */}
           {isMenuOpen && (
             <div 
               ref={mobileMenuRef}
-              className="fixed inset-0 z-40 transform transition-transform duration-300 ease-in-out md:hidden"
+              className="fixed inset-0 z-[9999] md:hidden"
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                width: '100vw',
+                height: '100vh',
+                overflow: 'hidden',
+                pointerEvents: 'auto',
+              }}
             >
-              <div className="fixed inset-0 bg-black/50" onClick={() => setIsMenuOpen(false)}></div>
-              <div className="fixed inset-y-0 left-0 w-4/5 max-w-xs bg-gray-900 overflow-y-auto">
-                <div className="p-4 border-b border-gray-800">
-                  <div className="flex items-center gap-3 px-2 py-3">
-                    {auth?.user?.avatar ? (
-                      <img
-                        src={auth.user.avatar}
-                        alt="Profile"
-                        className="h-10 w-10 rounded-full object-cover border-2 border-gray-700"
-                      />
-                    ) : (
-                      <div className="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center">
-                        <PersonOutlined className="text-gray-300" />
-                      </div>
-                    )}
+              <div 
+                className="absolute inset-0 bg-black/70" 
+                onClick={() => setIsMenuOpen(false)}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  zIndex: 1,
+                }}
+              />
+              <div 
+                className="absolute inset-y-0 left-0 w-4/5 max-w-xs bg-gray-900 overflow-y-auto shadow-2xl"
+                style={{
+                  position: 'absolute',
+                  zIndex: 2,
+                  height: '100vh',
+                  transform: 'translateX(0)',
+                  transition: 'transform 0.3s ease-in-out',
+                }}
+              >
+              <div className="p-4 border-b border-gray-800">
+                <div className="flex items-center gap-3 px-2 py-3">
+                  {auth?.user?.avatar ? (
+                    <img
+                      src={auth.user.avatar}
+                      alt="Profile"
+                      className="h-10 w-10 rounded-full object-cover border-2 border-gray-700"
+                    />
+                  ) : (
+                    <div className="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center">
+                      <PersonOutlined className="text-gray-300" />
+                    </div>
+                  )}
                     <div>
                       <p className="text-sm font-medium text-white">{auth?.user?.first_name || 'Guest'}</p>
                       <p className="text-xs text-gray-400">{auth?.user?.email || 'guest@example.com'}</p>
@@ -266,70 +357,98 @@ const Navbar = () => {
                   </div>
                 </div>
                 <ul className="py-2">
-                  <li>
-                    <Link
-                      to="/tickets"
-                      className={`${location.pathname === "/tickets" && "text-accent"
-                        } flex items-center gap-2 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800`}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <ConfirmationNumberOutlined fontSize="small" />
-                      Tickets
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/profile"
-                      className="flex items-center gap-2 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <PersonOutlined fontSize="small" />
-                      Profile
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/wallet"
-                      className="flex items-center gap-2 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Wallet fontSize="small" />
-                      Wallet
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/community"
-                      className="flex items-center gap-2 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Home fontSize="small" />
-                      Community
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/support"
-                      className="flex items-center gap-2 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <SupportAgentOutlined fontSize="small" />
-                      Support
-                    </Link>
-                  </li>
+                  {userMode === "user" ? (
+                    <>
+                      <li>
+                        <Link
+                          to="/"
+                          className={`flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                            location.pathname === "/" ? "bg-gray-100 dark:bg-gray-700" : ""
+                          }`}
+                        >
+                          <Home className="mr-3 h-5 w-5 text-gray-400" />
+                          Home
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/my-events"
+                          className={`flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                            location.pathname === "/my-events" ? "bg-gray-100 dark:bg-gray-700" : ""
+                          }`}
+                        >
+                          <ConfirmationNumberOutlined className="mr-3 h-5 w-5 text-gray-400" />
+                          My Events
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/tickets"
+                          className={`flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                            location.pathname === "/tickets" ? "bg-gray-100 dark:bg-gray-700" : ""
+                          }`}
+                        >
+                          <ArticleOutlined className="mr-3 h-5 w-5 text-gray-400" />
+                          My Tickets
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/profile"
+                          className={`flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                            location.pathname === "/profile" ? "bg-gray-100 dark:bg-gray-700" : ""
+                          }`}
+                        >
+                          <PersonOutlined className="mr-3 h-5 w-5 text-gray-400" />
+                          Profile
+                        </Link>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li>
+                        <Link
+                          to="/vendor/dashboard"
+                          className={`flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                            location.pathname === "/vendor/dashboard" ? "bg-gray-100 dark:bg-gray-700" : ""
+                          }`}
+                        >
+                          <Home className="mr-3 h-5 w-5 text-gray-400" />
+                          Dashboard
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/vendor/events"
+                          className={`flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                            location.pathname.startsWith("/vendor/events") ? "bg-gray-100 dark:bg-gray-700" : ""
+                          }`}
+                        >
+                          <ConfirmationNumberOutlined className="mr-3 h-5 w-5 text-gray-400" />
+                          My Events
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          to="/vendor/create-event"
+                          className={`flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                            location.pathname === "/vendor/create-event" ? "bg-gray-100 dark:bg-gray-700" : ""
+                          }`}
+                        >
+                          <AddOutlined className="mr-3 h-5 w-5 text-gray-400" />
+                          Create Event
+                        </Link>
+                      </li>
+                    </>
+                  )}
                   <li>
                     <button
                       onClick={() => {
-                        if (userMode === "user") {
-                          setUserMode("vendor");
-                          navigate("/vendor/dashboard");
-                        } else {
-                          setUserMode("user");
-                          navigate("/");
-                        }
+                        const newMode = toggleUserMode();
+                        navigate(newMode === "user" ? "/" : "/vendor/dashboard");
                         setIsMenuOpen(false);
                       }}
-                      className="w-full flex items-center justify-between px-4 py-3 text-sm text-left text-gray-300 hover:bg-gray-800"
+                      className="w-full flex items-center justify-between px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                       <div className="flex items-center gap-2">
                         <People fontSize="small" />
@@ -346,7 +465,7 @@ const Navbar = () => {
                         toggleTheme();
                         setIsMenuOpen(false);
                       }}
-                      className="w-full flex items-center justify-between px-4 py-3 text-sm text-left text-gray-300 hover:bg-gray-800"
+                      className="w-full flex items-center justify-between px-4 py-2 text-sm text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                       <div className="flex items-center gap-2">
                         {theme === 'dark' ? (
@@ -372,7 +491,7 @@ const Navbar = () => {
                       className="flex items-center gap-2 px-4 py-3 w-full text-sm text-left text-red-500 hover:bg-gray-800"
                     >
                       <LogoutOutlined fontSize="small" />
-                      Log out
+                      {userMode === 'vendor' ? 'Exit Vendor Mode' : 'Log out'}
                     </button>
                   </li>
                 </ul>

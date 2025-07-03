@@ -21,43 +21,95 @@ const Signup = ({ setVisibleComponent, prevPage }) => {
     confirm_password: "",
   };
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     setIsLoading(true);
-    axios
-      .post(`${process.env.API_BASE_URL}/auth/signup/`, {
-        first_name: values.first_name,
-        last_name: values.last_name,
-        email: values.email,
-        home_address: values.home_address,
-        password: values.password,
-      })
-      .then((res) => {
-        toast.success("Account created successfully. Logging you in...");
-        axios
-         .post(`${process.env.API_BASE_URL}/auth/signin/`, {
-            email: values.email,
-            password: values.password,
-          })
-          .then((res) => {
-            localStorage.setItem(
-              "auth",
-              JSON.stringify({ token: res.data.token, user: res.data.user })
-            );
-            toast.success("Logged in successfully");
-            prevPage ? navigate(prevPage) : navigate("/");
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            console.log("an error occurred", error);
-            toast.error("Could not log you in");
-            setIsLoading(false);
-          });
-      })
-      .catch((error) => {
-        console.log("There was an error", error);
-        toast.error(`Error creating account: ${error.response.data.email[0]}`);
-        setIsLoading(false);
-      });
+    
+    try {
+      // 1. Register the user
+      const registerResponse = await axios.post(
+        `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/v1/auth/register/`,
+        {
+          first_name: values.first_name,
+          last_name: values.last_name,
+          email: values.email,
+          address: values.home_address, // Changed from home_address to match API
+          password: values.password,
+          password_confirmation: values.confirm_password,
+          role: 'user' // Assuming you have a role field
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      );
+
+      // 2. If registration is successful, log the user in
+      toast.success("Account created successfully. Logging you in...");
+      
+      const loginResponse = await axios.post(
+        `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/v1/auth/login/`,
+        {
+          email: values.email,
+          password: values.password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      );
+
+      // 3. Handle successful login
+      const { token, user } = loginResponse.data.data; // Assuming your API wraps response in a data object
+      
+      localStorage.setItem(
+        'auth',
+        JSON.stringify({ token, user })
+      );
+      
+      // Set user mode based on role if needed
+      const userMode = user.role === 'vendor' ? 'vendor' : 'user';
+      localStorage.setItem('userMode', userMode);
+      
+      toast.success("Logged in successfully!");
+      
+      // Redirect to the previous page or home
+      const redirectPath = prevPage || '/';
+      navigate(redirectPath);
+      
+      // Optional: Force a full page reload to ensure all context is updated
+      window.location.reload();
+      
+    } catch (error) {
+      console.error('Signup error:', error);
+      
+      // Handle different types of errors
+      let errorMessage = 'Failed to create account. Please try again.';
+      
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        if (error.response.data?.errors) {
+          // Handle validation errors
+          const errors = error.response.data.errors;
+          errorMessage = Object.values(errors)
+            .flat()
+            .join(' ');
+        } else if (error.response.data?.message) {
+          errorMessage = error.response.data.message;
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        errorMessage = 'No response from server. Please check your connection.';
+      }
+      
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const validationSchema = Yup.object({

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Event as EventIcon, 
   Receipt as ReceiptIcon, 
@@ -7,10 +7,23 @@ import {
   MonetizationOn as RevenueIcon,
   TrendingUp as TrendingUpIcon,
   CalendarToday as CalendarIcon,
-  PersonOutlined
+  PersonOutlined,
+  AddCircleOutline as AddIcon
 } from '@mui/icons-material';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const VendorDashboard = () => {
+  const navigate = useNavigate();
+  
+  // Check if user is authenticated as a vendor
+  useEffect(() => {
+    const auth = JSON.parse(localStorage.getItem('auth') || 'null');
+    if (!auth?.user?.is_vendor) {
+      toast.error('Please sign in as a vendor to access the dashboard');
+      navigate('/vendor-auth?mode=switch-to-vendor');
+    }
+  }, [navigate]);
   // Sample data - replace with actual data from your API
   const stats = [
     { 
@@ -49,10 +62,14 @@ const VendorDashboard = () => {
     { id: 3, name: 'Business Workshop', date: '2023-11-22', attendees: 45, status: 'Upcoming' },
   ];
 
+  const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+  const userName = auth?.user?.name || 'Vendor';
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white"></h1>
+    <div className="p-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Welcome back, {userName}!</h1>
+        <p className="text-gray-600 dark:text-gray-300 mt-2">Here's what's happening with your events today</p>
         <Link
           to="/vendor/create-event"
           className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors flex items-center"
@@ -62,7 +79,17 @@ const VendorDashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="flex justify-end mb-6">
+        <button
+          onClick={() => navigate('/vendor/create-event')}
+          className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+        >
+          <AddIcon className="mr-2" />
+          Create New Event
+        </button>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat, index) => (
           <Link
             key={index}

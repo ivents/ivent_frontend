@@ -85,7 +85,7 @@ const VendorLayout = () => {
       label: 'Ticket Management' 
     },
     { 
-      to: '/vendor/analytics', 
+      to: '/vendor/analysis-and-report', 
       icon: <AnalyticsOutlined />, 
       label: 'Analysis and Report' 
     },

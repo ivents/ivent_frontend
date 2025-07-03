@@ -25,52 +25,84 @@ const Login = ({ setVisibleComponent, prevPage }) => {
       .required("Required"),
   });
 
-  // Simulate successful login without backend
-  const onSubmit = (values) => {
+  // Original API call code (commented out for reference)
+  /*
+  const onSubmit = async (values) => {
     setIsLoading(true);
-    // Simulate API call delay
-    setTimeout(() => {
+    try {
+      const res = await axios.post(`${process.env.API_BASE_URL}/auth/signin/`, values);
       localStorage.setItem(
         "auth",
-        JSON.stringify({ 
-          token: "dummy-token-for-development", 
-          user: { 
-            id: 1, 
-            email: values.email,
-            name: values.email.split('@')[0],
-            is_vendor: false
-          } 
-        })
+        JSON.stringify({ token: res.data.token, user: res.data.user })
       );
-      toast.success("Logged in successfully! (Demo mode)");
-      // Redirect to main dashboard after successful login
-      prevPage ? navigate(prevPage) : navigate("/");
+      localStorage.setItem("userMode", "user");
+      toast.success("Logged in successfully!");
+      navigate(prevPage || "/");
+    } catch (error) {
+      console.error("Error during login:", error);
+      toast.error(error.response?.data?.non_field_errors?.[0] || "An error occurred during login");
+    } finally {
       setIsLoading(false);
-    }, 1000);
-  };
-
-  // Original API call code (commented out)
-  /*
-  const onSubmit = (values) => {
-    setIsLoading(true);
-    axios
-      .post(`${process.env.API_BASE_URL}/auth/signin/`, values)
-      .then((res) => {
-        localStorage.setItem(
-          "auth",
-          JSON.stringify({ token: res.data.token, user: res.data.user })
-        );
-        toast.success("Logged in successfully!");
-        prevPage ? navigate(prevPage) : navigate("/");
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.log("an error occurred", error);
-        setIsLoading(false);
-        toast.error(error.response?.data?.non_field_errors?.[0] || "An error occurred during login");
-      });
+    }
   };
   */
+
+  const onSubmit = async (values) => {
+    setIsLoading(true);
+    
+    try {
+      // Make API call to login endpoint
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/v1/auth/login/`, 
+        {
+          email: values.email,
+          password: values.password
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          withCredentials: true // Important for cookies/sessions if using them
+        }
+      );
+      
+      // Handle successful login
+      const { token, user } = response.data;
+      
+      // Store the auth data in localStorage
+      localStorage.setItem(
+        'auth',
+        JSON.stringify({ token, user })
+      );
+      
+      // Set user mode based on user type (assuming user object has a type field)
+      const userMode = user.is_vendor ? 'vendor' : 'user';
+      localStorage.setItem('userMode', userMode);
+      
+      // Show success message
+      toast.success('Logged in successfully!');
+      
+      // Redirect to the previous page or home page
+      const redirectPath = prevPage || '/';
+      navigate(redirectPath);
+      
+      // Optional: Force a full page reload to ensure all context is updated
+      window.location.reload();
+      
+    } catch (error) {
+      console.error('Login error:', error);
+      
+      // Handle different types of errors
+      const errorMessage = error.response?.data?.message || 
+                         error.response?.data?.detail || 
+                         'Failed to log in. Please check your credentials and try again.';
+      
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Formik
